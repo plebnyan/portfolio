@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Logo concepts — terminal set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--bg:#f6f2e9;--ink:#16181d;--muted:#655f52;--faint:#938c7c;--accent:#16a34a;--border:#e4dfd1}
+  body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.6;padding:48px 24px 80px}
+  .wrap{max-width:1000px;margin:0 auto}
+  h1{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:6px;max-width:660px}
+  .hint{font-family:'DM Mono',monospace;font-size:12px;color:var(--faint);margin-bottom:34px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;flex-direction:column}
+  .name{font-size:15px;font-weight:600;margin-bottom:4px}
+  .desc{font-size:12.5px;color:var(--muted);margin-bottom:18px;min-height:34px}
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:120px;background:var(--bg);border-radius:10px;padding:20px}
+  .foot{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+  .fav{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .foot span{font-family:'DM Mono',monospace;font-size:11px;color:var(--faint)}
+  svg{display:block}
+  .cursor{animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Terminal monogram — variations</h1>
+  <p class="sub">All riffs on concept #2: mono type, ink + green, a command-line feel. The cursors blink, like a real terminal. Same six letters of DNA, different personality.</p>
+  <p class="hint">pick one (or say "8 but the cursor from 2") and I'll finalise it + build the favicon/avatar/signature set.</p>
+
+  <div class="grid">
+
+    <!-- 1 block cursor after -->
+    <div class="card">
+      <div class="name">1 · Block cursor</div>
+      <div class="desc">“nlt” with a solid green cursor block after it. Clean, confident.</div>
+      <div class="stage">
+        <svg width="160" height="80" viewBox="0 0 160 80"><text x="12" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="44" font-weight="500" fill="#16181d">nlt</text><rect class="cursor" x="106" y="20" width="20" height="42" fill="#16a34a"/></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 60 60"><text x="2" y="33" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="32" font-weight="500" fill="#16181d">n</text><rect x="33" y="15" width="15" height="32" fill="#16a34a"/></svg></div><span>favicon: n▮</span></div>
+    </div>
+
+    <!-- 2 underscore prompt -->
+    <div class="card">
+      <div class="name">2 · Underscore prompt</div>
+      <div class="desc">A green underscore cursor — the classic blinking “_” of an old terminal.</div>
+      <div class="stage">
+        <svg width="160" height="80" viewBox="0 0 160 80"><text x="12" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="44" font-weight="500" fill="#16181d">nlt</text><rect class="cursor" x="104" y="56" width="26" height="7" rx="3.5" fill="#16a34a"/></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 60 60"><text x="2" y="30" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="32" font-weight="500" fill="#16181d">n</text><rect x="30" y="44" width="20" height="6" rx="3" fill="#16a34a"/></svg></div><span>favicon: n_</span></div>
+    </div>
+
+    <!-- 3 caret prompt -->
+    <div class="card">
+      <div class="name">3 · Shell caret</div>
+      <div class="desc">A green “❯” prompt before the letters — reads as “a command being run”.</div>
+      <div class="stage">
+        <svg width="180" height="80" viewBox="0 0 180 80"><text x="10" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="40" font-weight="500" fill="#16a34a">❯</text><text x="48" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="44" font-weight="500" fill="#16181d">nlt</text></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 60 60"><text x="6" y="32" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16a34a">❯</text><text x="30" y="32" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16181d">n</text></svg></div><span>favicon: ❯n</span></div>
+    </div>
+
+    <!-- 4 dollar prompt -->
+    <div class="card">
+      <div class="name">4 · Dollar prompt</div>
+      <div class="desc">The unix “$” prompt in green. Instantly “developer” to anyone technical.</div>
+      <div class="stage">
+        <svg width="180" height="80" viewBox="0 0 180 80"><text x="10" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="42" font-weight="500" fill="#16a34a">$</text><text x="46" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="44" font-weight="500" fill="#16181d">nlt</text></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 60 60"><text x="6" y="32" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16a34a">$</text><text x="28" y="32" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16181d">n</text></svg></div><span>favicon: $n</span></div>
+    </div>
+
+    <!-- 5 function call -->
+    <div class="card">
+      <div class="name">5 · Function call</div>
+      <div class="desc">“nlt()” — reads as calling a function. Subtle, codey, works as a wordmark too.</div>
+      <div class="stage">
+        <svg width="180" height="80" viewBox="0 0 180 80"><text x="14" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="44" font-weight="500" fill="#16181d">nlt<tspan fill="#16a34a">()</tspan></text></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 70 60"><text x="4" y="32" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16181d">n<tspan fill="#16a34a">()</tspan></text></svg></div><span>favicon: n()</span></div>
+    </div>
+
+    <!-- 6 brackets -->
+    <div class="card">
+      <div class="name">6 · Brackets</div>
+      <div class="desc">“[nlt]” — array/index feel. Compact and balanced, symmetrical for an avatar.</div>
+      <div class="stage">
+        <svg width="180" height="80" viewBox="0 0 180 80"><text x="16" y="42" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="44" font-weight="500" fill="#16181d"><tspan fill="#16a34a">[</tspan>nlt<tspan fill="#16a34a">]</tspan></text></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 60 60"><text x="6" y="32" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16181d"><tspan fill="#16a34a">[</tspan>n<tspan fill="#16a34a">]</tspan></text></svg></div><span>favicon: [n]</span></div>
+    </div>
+
+    <!-- 7 tile + cursor -->
+    <div class="card">
+      <div class="name">7 · Tile + cursor</div>
+      <div class="desc">Terminal feel packed into a tile — best of both. Strongest small favicon here.</div>
+      <div class="stage">
+        <svg width="112" height="112" viewBox="0 0 100 100"><rect x="4" y="4" width="92" height="92" rx="22" fill="#16181d"/><text x="20" y="53" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="26" font-weight="500" fill="#f6f2e9">nlt</text><rect class="cursor" x="70" y="40" width="12" height="26" fill="#16a34a"/></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 100 100"><rect x="4" y="4" width="92" height="92" rx="22" fill="#16181d"/><text x="20" y="55" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="28" font-weight="500" fill="#f6f2e9">nlt</text><rect x="72" y="40" width="12" height="28" fill="#16a34a"/></svg></div><span>favicon size</span></div>
+    </div>
+
+    <!-- 8 uppercase -->
+    <div class="card">
+      <div class="name">8 · Uppercase block</div>
+      <div class="desc">“NLT” with a green cursor — more assertive and monumental than lowercase.</div>
+      <div class="stage">
+        <svg width="180" height="80" viewBox="0 0 180 80"><text x="12" y="43" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="42" font-weight="500" letter-spacing="1" fill="#16181d">NLT</text><rect class="cursor" x="124" y="20" width="20" height="42" fill="#16a34a"/></svg>
+      </div>
+      <div class="foot"><div class="fav"><svg width="24" height="24" viewBox="0 0 60 60"><text x="4" y="33" dominant-baseline="central" font-family="'DM Mono',monospace" font-size="30" font-weight="500" fill="#16181d">N</text><rect x="36" y="15" width="14" height="32" fill="#16a34a"/></svg></div><span>favicon: N▮</span></div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

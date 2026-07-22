@@ -15,6 +15,8 @@ const navLinks = [
 const gh = "https://github.com/plebnyan";
 const li = "https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa";
 const mail = "mailto:hello@nyanlynntun.com";
+const canonical = new URL(Astro.url.pathname, "https://nyanlynntun.com").href;
+const ogImage = "https://nyanlynntun.com/img/literally_me.jpg";
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +25,18 @@ const mail = "mailto:hello@nyanlynntun.com";
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+  <!-- Open Graph / social link previews -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Noto+Sans+Myanmar:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -43,7 +56,10 @@ const mail = "mailto:hello@nyanlynntun.com";
 
     nav { position: sticky; top: 0; z-index: 100; background: rgba(246,242,233,.85); backdrop-filter: blur(14px); border-bottom: 1px solid var(--border); }
     nav .inner { display: flex; align-items: center; justify-content: space-between; max-width: 1080px; margin: 0 auto; padding: 0 24px; height: 56px; }
-    .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--text); text-decoration: none; letter-spacing: .02em; font-weight: 500; }
+    .nav-logo { display: inline-flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 13px; color: var(--text); text-decoration: none; letter-spacing: .02em; font-weight: 500; }
+    .nav-logo svg { display: block; border-radius: 6px; }
+    footer .mark { display: inline-flex; align-items: center; gap: 8px; }
+    footer .mark svg { display: block; border-radius: 5px; }
     .nav-links { display: flex; gap: 26px; list-style: none; }
     .nav-links a { font-family: var(--sans); font-size: 14px; color: var(--muted); text-decoration: none; transition: color .15s; }
     .nav-links a:hover { color: var(--text); }
@@ -177,7 +193,10 @@ const mail = "mailto:hello@nyanlynntun.com";
 <body>
   <nav>
     <div class="inner">
-      <a class="nav-logo" href="/">nyanlynntun.com</a>
+      <a class="nav-logo" href="/">
+        <svg width="22" height="22" viewBox="0 0 100 100" aria-hidden="true"><rect x="4" y="4" width="92" height="92" rx="22" fill="#16181d"/><text x="20" y="56" dominant-baseline="central" font-family="'DM Mono', monospace" font-size="30" font-weight="500" fill="#f6f2e9">nlt</text><rect x="73" y="40" width="12" height="30" fill="#16a34a"/></svg>
+        <span>Nyan Lynn Tun</span>
+      </a>
       <ul class="nav-links">
         {navLinks.map((l) => (
           <li><a href={l.href} class={isActive(l.href) ? "active" : ""}>{l.label}</a></li>
@@ -192,7 +211,10 @@ const mail = "mailto:hello@nyanlynntun.com";
 
   <footer>
     <div class="inner">
-      <p>© 2026 Nyan Lynn Tun</p>
+      <p class="mark">
+        <svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><rect x="4" y="4" width="92" height="92" rx="22" fill="#16181d"/><text x="20" y="57" dominant-baseline="central" font-family="'DM Mono', monospace" font-size="30" font-weight="500" fill="#f6f2e9">nlt</text><rect x="73" y="40" width="12" height="30" fill="#16a34a"/></svg>
+        © 2026 Nyan Lynn Tun
+      </p>
       <p>
         <a href={gh} target="_blank" rel="noopener">GitHub</a> ·
         <a href={li} target="_blank" rel="noopener">LinkedIn</a> ·
