@@ -1,0 +1,41 @@
+---
+import Base from "../layouts/Base.astro";
+
+const services = [
+  { h: "Build a pipeline", p: "Design and ship reliable batch or streaming ingestion + transformation on Azure / Databricks." },
+  { h: "Lakehouse & modelling", p: "Stand up a medallion lakehouse, model your data, and build marts your analysts can trust." },
+  { h: "Data reliability review", p: "Audit an existing setup for quality, cost, and maintainability — and a plan to fix it." },
+];
+const mail = "mailto:hello@nyanlynntun.com";
+// Set this to your Cal.com link once created, e.g. "https://cal.com/nyanlynntun/intro"
+const bookingUrl = "";
+---
+<Base title="Work with me — Nyan Lynn Tun">
+  <section class="container">
+    <div class="page-head">
+      <div class="page-label">Work with me</div>
+      <h1>Consulting on <strong>data platforms</strong></h1>
+      <p class="lead">I help teams build data infrastructure they can rely on — pipelines, lakehouse architecture, and the modelling that makes everything downstream possible. If your data is slow, messy, or untrusted, that's the work I do.</p>
+    </div>
+  </section>
+
+  <section class="container block" style="padding-top: 40px;">
+    <div class="section-header"><span class="section-num">01</span><span class="section-title">How I can help</span><div class="section-line"></div></div>
+    <div class="services">
+      {services.map((s) => (
+        <div class="service"><h3>{s.h}</h3><p>{s.p}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container block">
+    <div class="section-header"><span class="section-num">02</span><span class="section-title">Book a call</span><div class="section-line"></div></div>
+    <div class="cta-box">
+      <p>Tell me what you're building and where it hurts. A 30-minute call, no charge, to see if I can help.</p>
+      <div class="cta-links">
+        <a class="btn btn-primary" href={bookingUrl || mail}>{bookingUrl ? "Book a 30-min call" : "Email to set up a call"}</a>
+        <a class="btn btn-ghost" href={mail}>Email instead</a>
+      </div>
+    </div>
+  </section>
+</Base>

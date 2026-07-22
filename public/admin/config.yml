@@ -1,0 +1,52 @@
+backend:
+  name: github
+  repo: plebnyan/portfolio
+  branch: main
+
+# Where uploaded images (diagrams, covers) are stored, and how they're referenced on the site.
+media_folder: "public/img"
+public_folder: "/img"
+
+collections:
+  - name: blog
+    label: "Blog posts"
+    label_singular: "Post"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: "Title (EN)", name: title, widget: string }
+      - { label: "Title (MY / Burmese)", name: titleMy, widget: string, required: false }
+      - { label: "Date", name: date, widget: datetime }
+      - { label: "Summary (EN)", name: excerpt, widget: text }
+      - { label: "Summary (MY / Burmese)", name: excerptMy, widget: text, required: false }
+      - { label: "Tags", name: tags, widget: list, required: false }
+      - { label: "Cover image", name: cover, widget: image, required: false }
+      - { label: "Draft (hide from site)", name: draft, widget: boolean, default: false }
+      - { label: "Body (EN)", name: body, widget: markdown }
+      - { label: "Body (MY / Burmese)", name: bodyMy, widget: markdown, required: false }
+
+  - name: projects
+    label: "Projects"
+    label_singular: "Project"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: "Title", name: title, widget: string }
+      - { label: "Order (lower = shown first)", name: order, widget: number, default: 0 }
+      - { label: "Featured on home", name: featured, widget: boolean, default: false }
+      - { label: "Summary", name: summary, widget: text }
+      - { label: "Tech stack", name: stack, widget: list }
+      - { label: "Problems it solves", name: problems, widget: list }
+      - { label: "Data model diagram (image)", name: dataModelImage, widget: image, required: false }
+      - { label: "Live dashboard URL (embed)", name: dashboardUrl, widget: string, required: false }
+      - { label: "GitHub repo URL", name: repoUrl, widget: string, required: false }
+      - { label: "Code & quality points", name: quality, widget: list }
+      - { label: "Related project slugs", name: related, widget: list, required: false }
+      - { label: "Draft (hide from site)", name: draft, widget: boolean, default: false }
+      - { label: "Extra notes (optional)", name: body, widget: markdown, required: false }

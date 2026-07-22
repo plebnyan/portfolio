@@ -1,0 +1,70 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+import { marked } from "marked";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p, all: posts } }));
+}
+
+const { post, all } = Astro.props;
+const d = post.data;
+const { Content } = await post.render();
+const myHtml = d.bodyMy ? marked.parse(d.bodyMy) : null;
+const hasMy = !!myHtml;
+const fmt = (dt) => dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+const related = all.filter((p) => p.slug !== post.slug).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+---
+<Base title={`${d.title} — Nyan Lynn Tun`}>
+  <section class="container">
+    <div class="page-head">
+      <div class="page-label">Blog</div>
+      <h1 id="post-title" data-en={d.title} data-my={d.titleMy ?? d.title} style="font-size: clamp(28px,4.5vw,40px);">{d.title}</h1>
+      <p class="card-meta" style="margin-top: 10px;">{fmt(d.date)}</p>
+    </div>
+  </section>
+
+  <article class="container block prose" style="padding-top: 28px;">
+    {hasMy && (
+      <div class="lang-toggle">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="my">မြန်မာ</button>
+      </div>
+    )}
+
+    <div class="lang-content active" data-lang="en"><Content /></div>
+    {hasMy && <div class="lang-content" data-lang="my" set:html={myHtml}></div>}
+
+    {related.length > 0 && (
+      <div class="related">
+        <div class="side-title">You may also like</div>
+        <div class="rel-grid">
+          {related.map((r) => (
+            <a class="card" href={`/blog/${r.slug}`}>
+              <div class="card-meta">{fmt(r.data.date)}</div>
+              <div class="card-title">{r.data.title}</div>
+              <p class="card-desc">{r.data.excerpt}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <div class="btn-row"><a class="btn btn-ghost" href="/blog">← Back to blog</a></div>
+  </article>
+
+  <script is:inline>
+    (function () {
+      var title = document.getElementById("post-title");
+      function setLang(l) {
+        document.querySelectorAll(".lang-content").forEach(function (c) { c.classList.toggle("active", c.dataset.lang === l); });
+        document.querySelectorAll(".lang-toggle button").forEach(function (b) { b.classList.toggle("active", b.dataset.lang === l); });
+        if (title && title.dataset[l]) title.textContent = title.dataset[l];
+      }
+      document.querySelectorAll(".lang-toggle button").forEach(function (b) {
+        b.addEventListener("click", function () { setLang(b.dataset.lang); });
+      });
+    })();
+  </script>
+</Base>

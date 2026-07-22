@@ -1,0 +1,28 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+---
+<Base title="Blog — Nyan Lynn Tun">
+  <section class="container">
+    <div class="page-head">
+      <div class="page-label">Blog</div>
+      <h1>Writing on <strong>data engineering</strong></h1>
+      <p class="lead">Lakehouse design, pipelines, and lessons from building data platforms in production.</p>
+    </div>
+  </section>
+
+  <section class="container block" style="padding-top: 40px;">
+    <div class="card-grid">
+      {posts.map((post) => (
+        <a class="card" href={`/blog/${post.slug}`}>
+          <div class="card-meta">{fmt(post.data.date)}{post.data.titleMy ? " · EN / မြန်မာ" : ""}</div>
+          <div class="card-title">{post.data.title}</div>
+          <p class="card-desc">{post.data.excerpt}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
