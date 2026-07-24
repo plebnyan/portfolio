@@ -22,7 +22,7 @@ Pulled directly from the live site. Every other asset must use these.
 - Card / surface white: `#ffffff`
 
 **Type**
-- `DM Sans` — headings and UI (weights 400/500/600)
+- `Segoe UI` — primary; headings and UI (system font, falls back to native sans off-Windows)
 - `DM Mono` — labels, code, technical accents (the "engineer" texture)
 - `Newsreader` (serif) — long-form reading (blog body only)
 - `Noto Sans Myanmar` — Burmese text
