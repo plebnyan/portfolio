@@ -1,0 +1,35 @@
+{
+  "updated": "August 2026",
+  "heading": "What I'm doing now.",
+  "lede": "A snapshot rather than an archive — this page gets rewritten, not appended to. If you're wondering whether I'm around and what I'm deep in, this is the honest answer.",
+  "sections": [
+    {
+      "label": "Building",
+      "items": [
+        "jobnet-lakehouse — extending the gold layer and getting the public dashboard live.",
+        "Rebuilding this site so the projects and the writing actually point at each other."
+      ]
+    },
+    {
+      "label": "Learning",
+      "items": [
+        "Going deeper on Unity Catalog governance — lineage, and what row-level security costs in practice.",
+        "Spark query plans, properly. Reading them rather than guessing at why a job is slow."
+      ]
+    },
+    {
+      "label": "Writing",
+      "items": [
+        "Working through a backlog of half-finished notes on medallion layering and data contracts.",
+        "Publishing in both English and Burmese — there is very little data engineering writing in Burmese."
+      ]
+    },
+    {
+      "label": "Open to",
+      "items": [
+        "Consulting on pipelines, lakehouse architecture, and data reliability.",
+        "Talking to anyone doing data work in or around Myanmar."
+      ]
+    }
+  ]
+}

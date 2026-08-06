@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import now from '../data/now.json';
+import site from '../data/site.json';
+
+// A /now page — the nownownow.com convention: what has your attention at this
+// point in your life, not a CV. Content lives in src/data/now.json, editable at
+// /admin under "Now page". Rewrite it rather than appending, and bump "updated".
+---
+<Base title="Now — Nyan Lynn Tun" description="What I'm working on, learning, and thinking about right now.">
+  <div class="read">
+    <header class="head">
+      <p class="eyebrow">Now</p>
+      <h1>{now.heading}</h1>
+      <p class="lede">{now.lede}</p>
+      <p class="stamp">Last updated {now.updated}</p>
+    </header>
+
+    {now.sections.map((s) => (
+      <section class="nsec">
+        <div class="sec-head"><b>{s.label}</b><i></i></div>
+        <ul class="nlist">{s.items.map((it) => <li>{it}</li>)}</ul>
+      </section>
+    ))}
+
+    <p class="foot-note">
+      This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener">now page</a>.
+      If you have one, send me the link — <a href={`mailto:${site.identity.email}`}>{site.identity.email}</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .head { padding: 84px 0 44px; }
+  .head h1 { font-size: clamp(34px, 5.2vw, 52px); line-height: 1.05; margin: 18px 0 18px; }
+  .lede { font-size: 18px; line-height: 1.68; color: var(--mute); }
+  .stamp {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--faint); margin-top: 22px;
+  }
+  .nsec { margin-bottom: 46px; }
+  .nlist { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .nlist li {
+    display: flex; gap: 14px; font-size: 16.5px; line-height: 1.66; color: var(--body);
+  }
+  .nlist li::before { content: '→'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+  .foot-note {
+    margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line);
+    font-size: 14.5px; color: var(--faint); line-height: 1.7;
+  }
+  .foot-note a { color: var(--accent2); text-decoration: none; border-bottom: 1px dashed rgba(90,158,199,.5); }
+  .foot-note a:hover { color: var(--accent-hi); }
+</style>

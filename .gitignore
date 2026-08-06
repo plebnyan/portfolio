@@ -15,3 +15,9 @@ CMS-GUIDE.md
 .DS_Store
 npm-debug.log*
 *.log
+
+# Obsidian workspace config
+.obsidian/
+
+# Claude Code local config
+.claude/

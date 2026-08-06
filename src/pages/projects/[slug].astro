@@ -1,0 +1,149 @@
+---
+import Base from '../../layouts/Base.astro';
+import Backlinks from '../../components/Backlinks.astro';
+import Toc from '../../components/Toc.astro';
+import { isPublished } from '../../lib/content';
+import { getCollection } from 'astro:content';
+import { isTranslation, translationSlug } from '../../lib/i18n';
+
+export async function getStaticPaths() {
+  const all = await getCollection('projects', isPublished);
+  return all
+    .filter((p) => !isTranslation(p.slug))
+    .map((p) => ({
+      params: { slug: p.slug },
+      props: { project: p, my: all.find((t) => t.slug === translationSlug(p.slug)) ?? null },
+    }));
+}
+
+const { project, my } = Astro.props;
+const d = project.data;
+const { Content, headings } = await project.render();
+const My = my ? (await my.render()).Content : null;
+const hasMy = !!My;
+const statusLabel = { active: 'In progress', shipped: 'Shipped', archived: 'Archived' };
+---
+<Base title={`${d.title} — Nyan Lynn Tun`} description={d.summary}>
+  <div class="shell" data-lang-root data-lang="en">
+    <a class="back" href="/projects">← Projects</a>
+
+    <header class="head">
+      <p class="eyebrow">Project · {statusLabel[d.status]}</p>
+      <h1 data-title-en={d.title} data-title-my={my ? my.data.title : d.title}>{d.title}</h1>
+
+      <div class="lang-pane active" data-lang="en"><p class="lede">{d.summary}</p></div>
+      {hasMy && (
+        <div class="lang-pane" data-lang="my"><p class="lede my-title">{my.data.summary}</p></div>
+      )}
+
+      <div class="facts">
+        {d.stack.length > 0 && (
+          <div class="fact">
+            <b>Stack</b>
+            <span>{d.stack.join(' · ')}</span>
+          </div>
+        )}
+        {d.repoUrl && (
+          <div class="fact">
+            <b>Source</b>
+            <span><a href={d.repoUrl} target="_blank" rel="noopener">{d.repoUrl.replace('https://github.com/', '')}</a></span>
+          </div>
+        )}
+        {d.tags.length > 0 && (
+          <div class="fact">
+            <b>Topics</b>
+            <span class="taglist">{d.tags.map((t) => <a class="tag" href={`/tags/${t}/`}>{t}</a>)}</span>
+          </div>
+        )}
+      </div>
+
+      {hasMy && (
+        <div class="lang-toggle" style="margin-top: 26px;">
+          <button data-lang="en" class="active" aria-pressed="true">EN</button>
+          <button data-lang="my" aria-pressed="false">မြန်မာ</button>
+        </div>
+      )}
+    </header>
+
+    {d.problems.length > 0 && (
+      <section class="blk">
+        <div class="sec-head"><b>Problems it solves</b><i></i></div>
+        <ul class="arrows">{d.problems.map((p) => <li>{p}</li>)}</ul>
+      </section>
+    )}
+
+    {d.dataModelImage && (
+      <section class="blk">
+        <div class="sec-head"><b>Data model</b><i></i></div>
+        <figure class="figure">
+          <img src={d.dataModelImage} alt={`${d.title} data model`} loading="lazy" />
+          <figcaption>How the tables fit together</figcaption>
+        </figure>
+      </section>
+    )}
+
+    {d.dashboardUrl && (
+      <section class="blk">
+        <div class="sec-head"><b>Live dashboard</b><i></i></div>
+        <div class="browser">
+          <div class="browser-bar"><i></i><i></i><i></i><span>{d.dashboardUrl}</span></div>
+          <iframe src={d.dashboardUrl} loading="lazy" title={`${d.title} dashboard`}></iframe>
+        </div>
+      </section>
+    )}
+
+    <article class="body">
+      <Toc headings={headings} />
+      <div class="lang-pane active" data-lang="en"><div class="prose"><Content /></div></div>
+      {hasMy && <div class="lang-pane" data-lang="my"><div class="prose"><My /></div></div>}
+    </article>
+
+    {d.quality.length > 0 && (
+      <section class="blk">
+        <div class="sec-head"><b>Code &amp; quality</b><i></i></div>
+        <ul class="checks">{d.quality.map((q) => <li>{q}</li>)}</ul>
+      </section>
+    )}
+
+    <Backlinks collection="projects" slug={project.slug} />
+  </div>
+</Base>
+
+<style>
+  .back { font-family: var(--mono); font-size: 12px; color: var(--mute); text-decoration: none; display: inline-block; padding-top: 44px; }
+  .back:hover { color: var(--accent); }
+
+  .head { padding: 22px 0 0; }
+  .head h1 {
+    font-size: calc(clamp(34px, 5.4vw, 56px) * var(--title-scale, 1));
+    line-height: var(--title-lh, 1.03);
+    margin: 18px 0 18px; max-width: 18ch;
+  }
+  .lede { font-size: 18px; line-height: 1.68; color: var(--mute); max-width: 60ch; }
+
+  .facts { display: flex; flex-wrap: wrap; gap: 14px 44px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+  .fact { display: flex; flex-direction: column; gap: 6px; }
+  .fact b { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); font-weight: 400; }
+  .fact span { font-size: 14px; color: var(--body); }
+  .fact a { color: var(--accent2); text-decoration: none; }
+  .fact a:hover { color: var(--accent-hi); }
+
+  .blk { padding: 62px 0 0; }
+
+  .arrows, .checks { list-style: none; display: flex; flex-direction: column; gap: 13px; max-width: 68ch; }
+  .arrows li, .checks li { display: flex; gap: 13px; font-size: 16px; line-height: 1.62; color: var(--body); }
+  .arrows li::before { content: '→'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+  .checks li::before { content: '✓'; color: var(--accent2); font-family: var(--mono); flex-shrink: 0; }
+
+  .figure { border: 1px solid var(--line); background: var(--raise); padding: 26px; }
+  .figure img { width: 100%; height: auto; display: block; }
+  .figure figcaption { font-family: var(--mono); font-size: 11px; color: var(--faint); text-align: center; margin-top: 16px; letter-spacing: .04em; }
+
+  .browser { border: 1px solid var(--line); background: var(--raise); }
+  .browser-bar { display: flex; align-items: center; gap: 6px; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  .browser-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--line2); display: block; }
+  .browser-bar span { margin-left: 12px; font-family: var(--mono); font-size: 11px; color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .browser iframe { width: 100%; height: 480px; border: 0; display: block; background: var(--ground); }
+
+  .body { padding: 56px 0 0; }
+</style>

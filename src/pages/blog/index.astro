@@ -1,28 +1,61 @@
 ---
-import Base from "../../layouts/Base.astro";
-import { getCollection } from "astro:content";
+import site from '../../data/site.json';
+import Base from '../../layouts/Base.astro';
+import { isPublished } from '../../lib/content';
+import { getCollection } from 'astro:content';
+import { originalsOnly } from '../../lib/i18n';
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const fmt = (d) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+const posts = originalsOnly(await getCollection('blog', isPublished))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d) => d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+// Grouped by year — the blog is the chronological half of the site, so the
+// year is the structure that actually carries meaning here.
+const years = [...new Set(posts.map((p) => p.data.date.getFullYear()))].sort((a, b) => b - a);
+
+const c = site.blogPage;
 ---
-<Base title="Blog — Nyan Lynn Tun">
-  <section class="container">
-    <div class="page-head">
-      <div class="page-label">Blog</div>
-      <h1>Writing on <strong>data engineering</strong></h1>
-      <p class="lead">Lakehouse design, pipelines, and lessons from building data platforms in production.</p>
-    </div>
-  </section>
+<Base title="Blog — Nyan Lynn Tun" description="Writing on lakehouse architecture, pipelines, and lessons from building data platforms.">
+  <div class="shell">
+    <header class="head">
+      <p class="eyebrow">{c.eyebrow}</p>
+      <h1>{c.heading}</h1>
+      <p class="lede">{c.lede}</p>
+    </header>
 
-  <section class="container block" style="padding-top: 40px;">
-    <div class="card-grid">
-      {posts.map((post) => (
-        <a class="card" href={`/blog/${post.slug}`}>
-          <div class="card-meta">{fmt(post.data.date)}{post.data.titleMy ? " · EN / မြန်မာ" : ""}</div>
-          <div class="card-title">{post.data.title}</div>
-          <p class="card-desc">{post.data.excerpt}</p>
-        </a>
-      ))}
-    </div>
-  </section>
+    {years.map((y) => (
+      <section class="year">
+        <div class="sec-head"><b>{y}</b><i></i></div>
+        <div class="rows">
+          {posts.filter((p) => p.data.date.getFullYear() === y).map((p) => (
+            <a class="row" href={`/blog/${p.slug}/`}>
+              <span class="row-idx">{fmt(p.data.date)}</span>
+              <div>
+                <div class="row-title">{p.data.title}</div>
+                <p class="row-desc">{p.data.excerpt}</p>
+              </div>
+              <span class="row-side">{p.data.tags.slice(0, 3).join('\n')}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {posts.length === 0 && (
+      <p class="empty">No posts published yet. Write one in the CMS at <code>/admin</code>.</p>
+    )}
+  </div>
 </Base>
+
+<style>
+  .head { padding: 84px 0 48px; }
+  .head h1 { font-size: clamp(34px, 5.2vw, 54px); line-height: 1.05; margin: 20px 0 18px; max-width: 16ch; }
+  .lede { font-size: 17px; line-height: 1.7; color: var(--mute); max-width: 56ch; }
+  .lede a { color: var(--accent2); text-decoration: none; border-bottom: 1px dashed rgba(90,158,199,.5); }
+  .lede a:hover { color: var(--accent-hi); }
+  .year { margin-bottom: 58px; }
+  .empty { font-size: 14.5px; color: var(--faint); padding: 30px 0; }
+  .row-idx { font-variant-numeric: tabular-nums; }
+  .row-side { white-space: pre-line; }
+</style>

@@ -7,6 +7,15 @@ backend:
 media_folder: "public/img"
 public_folder: "/img"
 
+# Editing in the CMS commits straight to `branch` above. Point it at whichever
+# branch is actually deployed, or edits will land somewhere the site never builds from.
+#
+# TRANSLATIONS are separate files, not extra fields: a Burmese version of
+# `medallion-lakehouse.md` is `medallion-lakehouse-my.md` in the same folder,
+# with just a title and summary of its own. It appears in the lists below as an
+# entry whose name ends in `-my`; the site renders it behind the EN/မြန်မာ
+# toggle rather than giving it a page of its own.
+
 collections:
   - name: blog
     label: "Blog posts"
@@ -17,16 +26,24 @@ collections:
     extension: md
     format: frontmatter
     fields:
-      - { label: "Title (EN)", name: title, widget: string }
-      - { label: "Title (MY / Burmese)", name: titleMy, widget: string, required: false }
-      - { label: "Date", name: date, widget: datetime }
-      - { label: "Summary (EN)", name: excerpt, widget: text }
-      - { label: "Summary (MY / Burmese)", name: excerptMy, widget: text, required: false }
-      - { label: "Tags", name: tags, widget: list, required: false }
+      - { label: "Title", name: title, widget: string }
+      - label: "Date"
+        name: date
+        widget: datetime
+        required: false
+        hint: "Required on a real post. Leave empty on a `-my` translation — it inherits the original's date."
+      - { label: "Summary", name: excerpt, widget: text }
+      - label: "Tags"
+        name: tags
+        widget: list
+        required: false
+        hint: "Shared with projects — a tag page shows both together. Lowercase, e.g. lakehouse, dbt, spark."
       - { label: "Cover image", name: cover, widget: image, required: false }
       - { label: "Draft (hide from site)", name: draft, widget: boolean, default: false }
-      - { label: "Body (EN)", name: body, widget: markdown }
-      - { label: "Body (MY / Burmese)", name: bodyMy, widget: markdown, required: false }
+      - label: "Body"
+        name: body
+        widget: markdown
+        hint: "Link to another post or project with [[its-slug]], or [[its-slug|custom text]]. The target page will list this one under Linked mentions."
 
   - name: projects
     label: "Projects"
@@ -38,15 +55,163 @@ collections:
     format: frontmatter
     fields:
       - { label: "Title", name: title, widget: string }
+      - { label: "Summary", name: summary, widget: text }
+      - label: "Status"
+        name: status
+        widget: select
+        options: ["active", "shipped", "archived"]
+        default: "shipped"
+      - label: "Tags"
+        name: tags
+        widget: list
+        required: false
+        hint: "Shared with blog posts — this is what ties the two halves of the site together."
+      - { label: "Tech stack", name: stack, widget: list }
       - { label: "Order (lower = shown first)", name: order, widget: number, default: 0 }
       - { label: "Featured on home", name: featured, widget: boolean, default: false }
-      - { label: "Summary", name: summary, widget: text }
-      - { label: "Tech stack", name: stack, widget: list }
-      - { label: "Problems it solves", name: problems, widget: list }
-      - { label: "Data model diagram (image)", name: dataModelImage, widget: image, required: false }
-      - { label: "Live dashboard URL (embed)", name: dashboardUrl, widget: string, required: false }
-      - { label: "GitHub repo URL", name: repoUrl, widget: string, required: false }
-      - { label: "Code & quality points", name: quality, widget: list }
-      - { label: "Related project slugs", name: related, widget: list, required: false }
+
+      # --- the case study itself ---
+      - label: "Case study (main body)"
+        name: body
+        widget: markdown
+        required: false
+        hint: "Write it however it wants to be written — any headings, any length. Use [[slug]] to link to other pages. Headings become the table of contents."
+
+      # --- optional blocks: each renders only if filled in ---
+      - { label: "Problems it solves (optional)", name: problems, widget: list, required: false }
+      - { label: "Data model diagram (optional)", name: dataModelImage, widget: image, required: false }
+      - { label: "Live dashboard URL (optional embed)", name: dashboardUrl, widget: string, required: false }
+      - { label: "GitHub repo URL (optional)", name: repoUrl, widget: string, required: false }
+      - { label: "Code & quality points (optional)", name: quality, widget: list, required: false }
       - { label: "Draft (hide from site)", name: draft, widget: boolean, default: false }
-      - { label: "Extra notes (optional)", name: body, widget: markdown, required: false }
+
+  # ---------------------------------------------------------------------------
+  # Everything below is site furniture rather than content: the words that sit
+  # around your posts. Editing these needs no code change and no deploy step
+  # beyond the usual rebuild.
+  # ---------------------------------------------------------------------------
+
+  - name: settings
+    label: "Site text"
+    files:
+      - name: site
+        label: "Site text (homepage, page headers, author card)"
+        file: "src/data/site.json"
+        fields:
+          - label: "Identity"
+            name: identity
+            widget: object
+            fields:
+              - { label: "Name", name: name, widget: string }
+              - { label: "Role", name: role, widget: string }
+              - { label: "Email", name: email, widget: string }
+              - { label: "GitHub URL", name: github, widget: string }
+              - { label: "LinkedIn URL", name: linkedin, widget: string }
+
+          - label: "Browser tab & search results"
+            name: meta
+            widget: object
+            fields:
+              - { label: "Default page title", name: title, widget: string }
+              - label: "Default description"
+                name: description
+                widget: text
+                hint: "Shown in Google results and link previews. Aim for 150–160 characters."
+
+          - label: "Navigation"
+            name: nav
+            widget: list
+            fields:
+              - { label: "Label", name: label, widget: string }
+              - { label: "Link", name: href, widget: string }
+
+          - label: "Homepage"
+            name: home
+            widget: object
+            fields:
+              - { label: "Eyebrow (small line above headline)", name: eyebrow, widget: string }
+              - label: "Headline"
+                name: headline
+                widget: string
+                hint: "First part, shown in white."
+              - label: "Headline — accent"
+                name: headlineAccent
+                widget: string
+                hint: "Second part, shown in green on its own line."
+              - { label: "Intro paragraph", name: lede, widget: text }
+              - { label: "Primary button", name: primaryCta, widget: string }
+              - { label: "Secondary button", name: secondaryCta, widget: string }
+              - { label: "Closing heading", name: closingHeading, widget: string }
+              - { label: "Closing paragraph", name: closingText, widget: text }
+
+          - label: "Projects page header"
+            name: projectsPage
+            widget: object
+            fields:
+              - { label: "Eyebrow", name: eyebrow, widget: string }
+              - { label: "Heading", name: heading, widget: string }
+              - { label: "Intro", name: lede, widget: text }
+
+          - label: "Blog page header"
+            name: blogPage
+            widget: object
+            fields:
+              - { label: "Eyebrow", name: eyebrow, widget: string }
+              - { label: "Heading", name: heading, widget: string }
+              - { label: "Intro", name: lede, widget: text }
+
+          - label: "Tags page header"
+            name: tagsPage
+            widget: object
+            fields:
+              - { label: "Eyebrow", name: eyebrow, widget: string }
+              - { label: "Heading", name: heading, widget: string }
+              - { label: "Intro", name: lede, widget: text }
+
+          - label: "Author card (homepage)"
+            name: bio
+            widget: object
+            fields:
+              - { label: "Role line", name: role, widget: string }
+              - { label: "Bio text", name: text, widget: text }
+              - { label: "Primary button", name: primaryCta, widget: string }
+              - { label: "Secondary button", name: secondaryCta, widget: string }
+
+      - name: now
+        label: "Now page"
+        file: "src/data/now.json"
+        fields:
+          - { label: "Heading", name: heading, widget: string }
+          - { label: "Intro", name: lede, widget: text }
+          - label: "Last updated"
+            name: updated
+            widget: string
+            hint: "Free text, e.g. \"August 2026\". Bump it whenever you rewrite this page."
+          - label: "Sections"
+            name: sections
+            widget: list
+            fields:
+              - { label: "Section label", name: label, widget: string }
+              - { label: "Items", name: items, widget: list }
+
+  - name: pages
+    label: "Pages"
+    files:
+      - name: about
+        label: "About page"
+        file: "src/content/pages/about.md"
+        fields:
+          - { label: "Eyebrow", name: eyebrow, widget: string, required: false }
+          - { label: "Title", name: title, widget: string }
+          - { label: "Intro", name: lede, widget: text, required: false }
+          - label: "Fact table"
+            name: facts
+            widget: list
+            required: false
+            fields:
+              - { label: "Label", name: label, widget: string }
+              - { label: "Value", name: value, widget: string }
+          - label: "Body"
+            name: body
+            widget: markdown
+            hint: "Standard markdown. Links like [Projects](/projects) work."

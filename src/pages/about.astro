@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { getEntry } from 'astro:content';
+
+// Prose lives in src/content/pages/about.md — editable at /admin under "About page".
+const entry = await getEntry('pages', 'about');
+const d = entry.data;
+const { Content } = await entry.render();
+---
+<Base title={`${d.title} — Nyan Lynn Tun`} description={d.lede}>
+  <div class="read">
+    <header class="head">
+      {d.eyebrow && <p class="eyebrow">{d.eyebrow}</p>}
+      <h1>{d.title}</h1>
+      {d.lede && <p class="lede">{d.lede}</p>}
+    </header>
+
+    {d.facts.length > 0 && (
+      <div class="facts">
+        {d.facts.map((f) => (
+          <div class="fact"><b>{f.label}</b><span>{f.value}</span></div>
+        ))}
+      </div>
+    )}
+
+    <div class="prose"><Content /></div>
+  </div>
+</Base>
+
+<style>
+  .head { padding: 84px 0 34px; }
+  .head h1 { font-size: clamp(34px, 5.2vw, 54px); line-height: 1.05; margin: 18px 0 18px; }
+  .lede { font-size: 18.5px; line-height: 1.65; color: var(--mute); }
+  .facts {
+    display: flex; flex-direction: column; gap: 0;
+    border-top: 1px solid var(--line2); margin-bottom: 44px;
+  }
+  .fact {
+    display: flex; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--line);
+    justify-content: space-between; align-items: baseline; flex-wrap: wrap;
+  }
+  .fact b {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--faint); font-weight: 400;
+  }
+  .fact span { font-size: 14.5px; color: var(--body); text-align: right; }
+</style>

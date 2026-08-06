@@ -1,0 +1,27 @@
+---
+import { getBacklinks } from '../lib/graph';
+
+const { collection, slug } = Astro.props;
+const links = await getBacklinks(collection, slug);
+---
+<section class="backlinks">
+  <div class="sec-head" style="margin-bottom: 0;">
+    <b>Linked mentions</b>
+    <i></i>
+    <span>{links.length}</span>
+  </div>
+
+  {links.length > 0 ? (
+    <div class="bl-grid">
+      {links.map((l) => (
+        <a class="bl-card" href={l.url}>
+          <div class="bl-kind">{l.collection === 'blog' ? 'Post' : 'Project'}</div>
+          <div class="bl-title">{l.title}</div>
+          {l.excerpt && <p class="bl-desc">{l.excerpt.slice(0, 120)}{l.excerpt.length > 120 ? '…' : ''}</p>}
+        </a>
+      ))}
+    </div>
+  ) : (
+    <p class="bl-empty">Nothing links here yet. Reference this page as <code>[[{slug}]]</code> from a post or project and it will show up.</p>
+  )}
+</section>

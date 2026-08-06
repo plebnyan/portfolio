@@ -1,0 +1,50 @@
+{
+  "identity": {
+    "name": "Nyan Lynn Tun",
+    "role": "Data Engineer",
+    "email": "hello@nyanlynntun.com",
+    "github": "https://github.com/plebnyan",
+    "linkedin": "https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa"
+  },
+  "meta": {
+    "title": "Nyan Lynn Tun — Data Engineer",
+    "description": "Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks."
+  },
+  "nav": [
+    { "label": "Projects", "href": "/projects" },
+    { "label": "Blog", "href": "/blog" },
+    { "label": "Tags", "href": "/tags" },
+    { "label": "About", "href": "/about" }
+  ],
+  "home": {
+    "eyebrow": "Data engineer · Available for consulting",
+    "headline": "Pipelines that",
+    "headlineAccent": "hold up.",
+    "lede": "Six years building data platforms on Azure — lakehouse architecture, dimensional modelling, and getting SAP data somewhere useful.",
+    "primaryCta": "See the work",
+    "secondaryCta": "Read the blog",
+    "closingHeading": "Building something that needs to be right?",
+    "closingText": "Open to consulting on pipelines, lakehouse architecture, and data reliability."
+  },
+  "projectsPage": {
+    "eyebrow": "Projects",
+    "heading": "Things I've built, written up properly.",
+    "lede": "Each one is a full case study — the problem, the model, the decisions I'd defend, and the ones I'd take back. Undated on purpose: these get revised as the work does."
+  },
+  "blogPage": {
+    "eyebrow": "Blog",
+    "heading": "What I'm learning, written down.",
+    "lede": "Notes from building data platforms — what worked, what broke, and what I'd do differently. Posts link into the projects they came out of."
+  },
+  "tagsPage": {
+    "eyebrow": "Topics",
+    "heading": "Everything, by subject.",
+    "lede": "Tags cut across both halves of the site — a topic page shows the posts and the projects together, which is usually the fastest way in."
+  },
+  "bio": {
+    "role": "Data Engineer · Azure & Databricks",
+    "text": "Six years building data platforms — lakehouse architecture, dimensional modelling, and SAP integration. I write up the projects properly and the mistakes honestly, in English and Burmese. Based in Myanmar, available for consulting.",
+    "primaryCta": "About me",
+    "secondaryCta": "Doing now"
+  }
+}

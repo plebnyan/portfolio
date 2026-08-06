@@ -1,0 +1,36 @@
+---
+// Table of contents from the h2/h3 headings Astro already extracted.
+const { headings = [] } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length > 2 && (
+  <nav class="toc" aria-label="On this page">
+    <div class="toc-label">On this page</div>
+    <ol>
+      {items.map((h) => (
+        <li class={h.depth === 3 ? 'sub' : ''}>
+          <a href={`#${h.slug}`}>{h.text}</a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<style>
+  .toc {
+    border-left: 1px solid var(--line2);
+    padding: 2px 0 2px 20px;
+    margin: 34px 0 6px;
+  }
+  .toc-label {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 12px;
+  }
+  .toc ol { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .toc li.sub { padding-left: 18px; }
+  .toc a {
+    font-size: 14px; color: var(--mute); text-decoration: none;
+    line-height: 1.45; transition: color .15s;
+  }
+  .toc a:hover { color: var(--accent-hi); }
+</style>

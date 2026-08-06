@@ -1,103 +1,122 @@
 ---
-import Base from "../layouts/Base.astro";
-import { getCollection } from "astro:content";
+import Base from '../layouts/Base.astro';
+import Lineage from '../components/Lineage.astro';
+import Bio from '../components/Bio.astro';
+import { isPublished } from '../lib/content';
+import { getCollection } from 'astro:content';
+import { getAllTags } from '../lib/graph';
+import { originalsOnly } from '../lib/i18n';
+import site from '../data/site.json';
 
-const projects = (await getCollection("projects", ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-const featured = projects.find((p) => p.data.featured) ?? projects[0];
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const latest = posts.slice(0, 2);
-const fmt = (d) => d.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+const c = site.home;
 
-const gh = "https://github.com/plebnyan";
-const li = "https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa";
-const mail = "mailto:hello@nyanlynntun.com";
+const projects = originalsOnly(await getCollection('projects', isPublished))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const posts = originalsOnly(await getCollection('blog', isPublished))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4);
+
+const tags = (await getAllTags()).slice(0, 10);
+
+const fmtYear = (d) => d.getFullYear();
+const pad = (n) => String(n).padStart(2, '0');
 ---
 <Base>
-  <section class="container" style="padding: 60px 0 8px;">
-    <div class="hero-top">
-      <div style="width:78px;height:78px;flex-shrink:0;">
-        <svg width="78" height="78" viewBox="0 0 100 100" aria-label="nlt logo"><rect x="4" y="4" width="92" height="92" rx="22" fill="#16181d"/><text x="20" y="56" dominant-baseline="central" font-family="'DM Mono', monospace" font-size="30" font-weight="500" fill="#f6f2e9">nlt</text><rect x="73" y="40" width="12" height="30" fill="#16a34a"/></svg>
+  <section class="hero">
+    <Lineage />
+    <div class="shell hero-in">
+      <p class="eyebrow">{c.eyebrow}</p>
+      <h1>{c.headline} <b>{c.headlineAccent}</b></h1>
+      <p class="hero-lede">{c.lede}</p>
+      <div class="btn-row hero-btns">
+        <a class="btn btn-primary" href="/projects">{c.primaryCta}</a>
+        <a class="btn" href="/blog">{c.secondaryCta}</a>
       </div>
-      <div>
-        <div class="page-label">Available for consulting</div>
-        <h1><strong>Nyan Lynn Tun</strong></h1>
-        <h2 class="role">Data Engineer</h2>
-        <div class="socials">
-          <a href={gh} target="_blank" rel="noopener" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.74-1.33-1.74-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 016 0c2.28-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          </a>
-          <a href={li} target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-          </a>
-          <a href={mail} aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-    <p class="lead">6+ years designing and building data platforms on Azure — specialising in data modelling, lakehouse architecture, and SAP data integration across Databricks, Synapse, and Microsoft Fabric.</p>
-    <div class="chips">
-      <span class="chip">Databricks</span><span class="chip">Apache Spark</span><span class="chip">Azure ADF</span><span class="chip">Delta Lake</span><span class="chip">dbt</span><span class="chip">Microsoft Fabric</span><span class="chip">SAP SLT</span>
-    </div>
-    <div class="btn-row">
-      <a class="btn btn-primary" href="/work-with-me">Work with me</a>
-      <a class="btn btn-ghost" href="/work">View projects</a>
-      <a class="btn btn-ghost" href="/blog">Read the blog</a>
     </div>
   </section>
 
-  <section class="container block">
-    <div class="section-header"><span class="section-num">01</span><span class="section-title">What I do</span><div class="section-line"></div></div>
-    <div class="services">
-      <div class="service"><h3>Pipelines &amp; ELT</h3><p>Reliable ingestion and transformation — batch and streaming — that teams can actually trust.</p></div>
-      <div class="service"><h3>Lakehouse &amp; modelling</h3><p>Medallion architecture on Databricks / Delta Lake, dimensional models, and clean data marts.</p></div>
-      <div class="service"><h3>SAP data integration</h3><p>Getting SAP data out and usable — SLT, staging, and downstream models across Azure.</p></div>
-    </div>
-  </section>
-
-  {featured && (
-    <section class="container block">
-      <div class="section-header"><span class="section-num">02</span><span class="section-title">Featured work</span><div class="section-line"></div></div>
-      <div class="card-grid">
-        <a class="card" href={`/work/${featured.slug}`}>
-          <div class="card-title">{featured.data.title}</div>
-          <p class="card-desc">{featured.data.summary}</p>
-          <div class="tags">
-            <span class="tag tag-accent">Featured</span>
-            {featured.data.stack.slice(0, 4).map((t) => <span class="tag">{t}</span>)}
-          </div>
-        </a>
+  <div class="shell">
+    <section class="block">
+      <div class="sec-head">
+        <b>Projects</b><i></i>
+        <span>{projects.length} {projects.length === 1 ? 'case study' : 'case studies'}</span>
       </div>
-      <div class="btn-row"><a class="btn btn-ghost" href="/work">See all projects</a></div>
-    </section>
-  )}
-
-  {latest.length > 0 && (
-    <section class="container block">
-      <div class="section-header"><span class="section-num">03</span><span class="section-title">From the blog</span><div class="section-line"></div></div>
-      <div class="card-grid">
-        {latest.map((post) => (
-          <a class="card" href={`/blog/${post.slug}`}>
-            <div class="card-meta">{fmt(post.data.date)}</div>
-            <div class="card-title">{post.data.title}</div>
-            <p class="card-desc">{post.data.excerpt}</p>
+      <div class="rows">
+        {projects.map((p, i) => (
+          <a class="row" href={`/projects/${p.slug}/`}>
+            <span class="row-idx">{pad(i + 1)}</span>
+            <div>
+              <div class="row-title">{p.data.title}</div>
+              <p class="row-desc">{p.data.summary}</p>
+            </div>
+            <span class="row-side">{p.data.stack.slice(0, 2).join('\n')}</span>
           </a>
         ))}
       </div>
-      <div class="btn-row"><a class="btn btn-ghost" href="/blog">All posts</a></div>
+      {projects.length === 0 && <p class="empty">No projects published yet.</p>}
     </section>
-  )}
 
-  <section class="container block">
-    <div class="section-header"><span class="section-num">04</span><span class="section-title">Get in touch</span><div class="section-line"></div></div>
-    <div class="cta-box">
-      <p>Open to consulting on pipelines, lakehouse architecture, and data reliability. Let's talk about what you're building.</p>
-      <div class="cta-links">
-        <a class="btn btn-primary" href="/work-with-me">Work with me</a>
-        <a class="btn btn-ghost" href={mail}>Email</a>
-        <a class="btn btn-ghost" href={gh} target="_blank" rel="noopener">GitHub</a>
-        <a class="btn btn-ghost" href={li} target="_blank" rel="noopener">LinkedIn</a>
+    <section class="block">
+      <div class="sec-head"><b>Writing</b><i></i><span>Recent</span></div>
+      <div class="rows">
+        {posts.map((p) => (
+          <a class="row" href={`/blog/${p.slug}/`}>
+            <span class="row-idx">{fmtYear(p.data.date)}</span>
+            <div>
+              <div class="row-title">{p.data.title}</div>
+              <p class="row-desc">{p.data.excerpt}</p>
+            </div>
+            <span class="row-side">{p.data.tags.slice(0, 2).join('\n')}</span>
+          </a>
+        ))}
       </div>
-    </div>
-  </section>
+      {posts.length === 0 && <p class="empty">No posts published yet.</p>}
+      {posts.length > 0 && (
+        <div class="btn-row" style="margin-top: 28px;">
+          <a class="btn" href="/blog">All posts</a>
+        </div>
+      )}
+    </section>
+
+    {tags.length > 0 && (
+      <section class="block">
+        <div class="sec-head"><b>Topics</b><i></i><span>Posts &amp; projects together</span></div>
+        <div class="taglist">
+          {tags.map((t) => (
+            <a class="tag" href={`/tags/${t.tag}/`}>{t.tag} <span class="tag-count">{t.total}</span></a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="block closing">
+      <h2>{c.closingHeading}</h2>
+      <p>{c.closingText}</p>
+      <div class="btn-row"><a class="btn btn-primary" href={`mailto:${site.identity.email}`}>{site.identity.email}</a></div>
+    </section>
+    <Bio />
+  </div>
 </Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  .hero-in { position: relative; z-index: 1; padding: 104px 30px 112px; }
+  .hero h1 {
+    font-size: clamp(46px, 8vw, 92px); line-height: .95; letter-spacing: -.035em;
+    margin: 26px 0 26px; max-width: 13ch; font-weight: 700;
+    font-variation-settings: 'wdth' 88;
+  }
+  .hero h1 b { display: block; color: var(--accent); font-weight: 700; }
+  .hero-lede { font-size: 18px; line-height: 1.62; color: var(--mute); max-width: 46ch; }
+  .hero-btns { margin-top: 34px; }
+
+  .block { padding: 76px 0; border-bottom: 1px solid var(--line); }
+  .block:last-child { border-bottom: 0; }
+  .empty { font-size: 14.5px; color: var(--faint); }
+
+  .closing h2 { font-size: clamp(26px, 3.6vw, 38px); margin-bottom: 14px; max-width: 20ch; }
+  .closing p { font-size: 16.5px; color: var(--mute); max-width: 46ch; margin-bottom: 28px; }
+
+  .row-side { white-space: pre-line; }
+</style>

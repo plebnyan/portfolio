@@ -3,6 +3,8 @@ title: "jobnet-lakehouse"
 order: 1
 featured: true
 summary: "An end-to-end medallion lakehouse that turns messy, scattered Myanmar job postings into a clean, queryable view of the hiring market — scraped weekly, governed, and served through a live dashboard."
+tags: ["lakehouse", "databricks", "architecture", "dbt"]
+status: "shipped"
 stack: ["Databricks", "Delta Lake", "dbt-core", "Azure ADF", "AWS Lambda", "Unity Catalog"]
 problems:
   - "Job seekers have no single view of what's actually being hired — postings are scattered across dozens of sites."
@@ -17,6 +19,5 @@ quality:
   - "Fully functioning DAG: ingest → transform → publish, with retries, scheduling, and failure alerts."
   - "CI on every pull request via GitHub Actions — build, test, and lint before anything merges."
   - "Version-controlled and environment-separated (dev / prod), governed by Unity Catalog."
-related: []
 draft: false
 ---

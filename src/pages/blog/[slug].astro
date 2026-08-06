@@ -1,70 +1,80 @@
 ---
-import Base from "../../layouts/Base.astro";
-import { getCollection } from "astro:content";
-import { marked } from "marked";
+import Base from '../../layouts/Base.astro';
+import Backlinks from '../../components/Backlinks.astro';
+import Toc from '../../components/Toc.astro';
+import { isPublished } from '../../lib/content';
+import { getCollection } from 'astro:content';
+import { isTranslation, translationSlug } from '../../lib/i18n';
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p, all: posts } }));
+  const all = await getCollection('blog', isPublished);
+  return all
+    .filter((p) => !isTranslation(p.slug))
+    .map((p) => ({
+      params: { slug: p.slug },
+      props: { post: p, my: all.find((t) => t.slug === translationSlug(p.slug)) ?? null },
+    }));
 }
 
-const { post, all } = Astro.props;
+const { post, my } = Astro.props;
 const d = post.data;
-const { Content } = await post.render();
-const myHtml = d.bodyMy ? marked.parse(d.bodyMy) : null;
-const hasMy = !!myHtml;
-const fmt = (dt) => dt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-const related = all.filter((p) => p.slug !== post.slug).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+const { Content, headings } = await post.render();
+const My = my ? (await my.render()).Content : null;
+const hasMy = !!My;
+const fmt = (dt) => dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const iso = d.date.toISOString();
 ---
-<Base title={`${d.title} — Nyan Lynn Tun`}>
-  <section class="container">
-    <div class="page-head">
-      <div class="page-label">Blog</div>
-      <h1 id="post-title" data-en={d.title} data-my={d.titleMy ?? d.title} style="font-size: clamp(28px,4.5vw,40px);">{d.title}</h1>
-      <p class="card-meta" style="margin-top: 10px;">{fmt(d.date)}</p>
-    </div>
-  </section>
+<Base title={`${d.title} — Nyan Lynn Tun`} description={d.excerpt}>
+  <div class="read" data-lang-root data-lang="en">
+    <a class="back" href="/blog">← Blog</a>
 
-  <article class="container block prose" style="padding-top: 28px;">
-    {hasMy && (
-      <div class="lang-toggle">
-        <button data-lang="en" class="active">EN</button>
-        <button data-lang="my">မြန်မာ</button>
+    <header class="head">
+      <p class="meta"><time datetime={iso}>{fmt(d.date)}</time></p>
+      <h1 data-title-en={d.title} data-title-my={my ? my.data.title : d.title}>{d.title}</h1>
+
+      <div class="lang-pane active" data-lang="en"><p class="lede">{d.excerpt}</p></div>
+      {hasMy && (
+        <div class="lang-pane" data-lang="my"><p class="lede my-title">{my.data.excerpt}</p></div>
+      )}
+
+      <div class="head-foot">
+        {d.tags.length > 0 && (
+          <div class="taglist">{d.tags.map((t) => <a class="tag" href={`/tags/${t}/`}>{t}</a>)}</div>
+        )}
+        {hasMy && (
+          <div class="lang-toggle">
+            <button data-lang="en" class="active" aria-pressed="true">EN</button>
+            <button data-lang="my" aria-pressed="false">မြန်မာ</button>
+          </div>
+        )}
       </div>
-    )}
+    </header>
 
-    <div class="lang-content active" data-lang="en"><Content /></div>
-    {hasMy && <div class="lang-content" data-lang="my" set:html={myHtml}></div>}
+    {d.cover && <img class="cover" src={d.cover} alt="" loading="lazy" />}
 
-    {related.length > 0 && (
-      <div class="related">
-        <div class="side-title">You may also like</div>
-        <div class="rel-grid">
-          {related.map((r) => (
-            <a class="card" href={`/blog/${r.slug}`}>
-              <div class="card-meta">{fmt(r.data.date)}</div>
-              <div class="card-title">{r.data.title}</div>
-              <p class="card-desc">{r.data.excerpt}</p>
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
+    <article>
+      <Toc headings={headings} />
+      <div class="lang-pane active" data-lang="en"><div class="prose"><Content /></div></div>
+      {hasMy && <div class="lang-pane" data-lang="my"><div class="prose"><My /></div></div>}
+    </article>
 
-    <div class="btn-row"><a class="btn btn-ghost" href="/blog">← Back to blog</a></div>
-  </article>
-
-  <script is:inline>
-    (function () {
-      var title = document.getElementById("post-title");
-      function setLang(l) {
-        document.querySelectorAll(".lang-content").forEach(function (c) { c.classList.toggle("active", c.dataset.lang === l); });
-        document.querySelectorAll(".lang-toggle button").forEach(function (b) { b.classList.toggle("active", b.dataset.lang === l); });
-        if (title && title.dataset[l]) title.textContent = title.dataset[l];
-      }
-      document.querySelectorAll(".lang-toggle button").forEach(function (b) {
-        b.addEventListener("click", function () { setLang(b.dataset.lang); });
-      });
-    })();
-  </script>
+    <Backlinks collection="blog" slug={post.slug} />
+  </div>
 </Base>
+
+<style>
+  .back { font-family: var(--mono); font-size: 12px; color: var(--mute); text-decoration: none; display: inline-block; padding-top: 44px; }
+  .back:hover { color: var(--accent); }
+
+  .head { padding: 26px 0 0; border-bottom: 1px solid var(--line); padding-bottom: 26px; }
+  .head h1 {
+    font-size: calc(clamp(32px, 5vw, 48px) * var(--title-scale, 1));
+    line-height: var(--title-lh, 1.08);
+    margin: 14px 0 18px;
+  }
+  .lede { font-size: 18.5px; line-height: 1.65; color: var(--mute); }
+  .head-foot { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 26px; }
+
+  .cover { width: 100%; height: auto; display: block; border: 1px solid var(--line); margin-top: 34px; }
+  article { padding-top: 20px; }
+</style>

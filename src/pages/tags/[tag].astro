@@ -1,0 +1,81 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getAllTags, getNodesForTag } from '../../lib/graph';
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+  return tags.map((t) => ({ params: { tag: t.tag }, props: { tag: t.tag } }));
+}
+
+const { tag } = Astro.props;
+const nodes = await getNodesForTag(tag);
+const projects = nodes.filter((n) => n.collection === 'projects');
+const posts = nodes
+  .filter((n) => n.collection === 'blog')
+  .sort((a, b) => (b.date?.valueOf() ?? 0) - (a.date?.valueOf() ?? 0));
+
+const fmt = (d) => (d ? d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '');
+const pad = (n) => String(n).padStart(2, '0');
+---
+<Base title={`${tag} — Nyan Lynn Tun`} description={`Posts and projects tagged ${tag}.`}>
+  <div class="shell">
+    <header class="head">
+      <p class="eyebrow"><a href="/tags">Topics</a> / {tag}</p>
+      <h1>{tag}</h1>
+      <p class="lede">
+        {projects.length > 0 && `${projects.length} project${projects.length === 1 ? '' : 's'}`}
+        {projects.length > 0 && posts.length > 0 && ' and '}
+        {posts.length > 0 && `${posts.length} post${posts.length === 1 ? '' : 's'}`}
+        {' '}on this topic.
+      </p>
+    </header>
+
+    {projects.length > 0 && (
+      <section class="block">
+        <div class="sec-head"><b>Projects</b><i></i></div>
+        <div class="rows">
+          {projects.map((p, i) => (
+            <a class="row" href={p.url}>
+              <span class="row-idx">{pad(i + 1)}</span>
+              <div>
+                <div class="row-title">{p.title}</div>
+                <p class="row-desc">{p.excerpt}</p>
+              </div>
+              <span class="row-side">Project</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {posts.length > 0 && (
+      <section class="block">
+        <div class="sec-head"><b>Posts</b><i></i></div>
+        <div class="rows">
+          {posts.map((p) => (
+            <a class="row" href={p.url}>
+              <span class="row-idx">{fmt(p.date)}</span>
+              <div>
+                <div class="row-title">{p.title}</div>
+                <p class="row-desc">{p.excerpt}</p>
+              </div>
+              <span class="row-side">Post</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <div class="btn-row" style="margin-top: 56px;"><a class="btn" href="/tags">All topics</a></div>
+  </div>
+</Base>
+
+<style>
+  .head { padding: 84px 0 44px; }
+  .head h1 { font-size: clamp(34px, 5.2vw, 54px); line-height: 1.05; margin: 18px 0 14px; }
+  .eyebrow a { color: var(--accent2); text-decoration: none; }
+  .eyebrow a:hover { color: var(--accent-hi); }
+  .lede { font-size: 17px; line-height: 1.7; color: var(--mute); }
+  .block { margin-bottom: 52px; }
+  .row-idx { font-variant-numeric: tabular-nums; }
+</style>
