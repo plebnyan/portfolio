@@ -11,15 +11,27 @@
     "description": "Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks."
   },
   "nav": [
-    { "label": "Projects", "href": "/projects" },
-    { "label": "Blog", "href": "/blog" },
-    { "label": "Tags", "href": "/tags" },
-    { "label": "About", "href": "/about" }
+    {
+      "label": "Projects",
+      "href": "/projects"
+    },
+    {
+      "label": "Blog",
+      "href": "/blog"
+    },
+    {
+      "label": "Tags",
+      "href": "/tags"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    }
   ],
   "home": {
     "eyebrow": "Data engineer · Available for consulting",
-    "headline": "Pipelines that",
-    "headlineAccent": "hold up.",
+    "headline": "I build",
+    "headlineAccent": "data pipelines.",
     "lede": "Six years building data platforms on Azure — lakehouse architecture, dimensional modelling, and getting SAP data somewhere useful.",
     "primaryCta": "See the work",
     "secondaryCta": "Read the blog",
