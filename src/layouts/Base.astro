@@ -388,6 +388,19 @@ const ogImage = 'https://nyanlynntun.com/img/literally_me.jpg';
       window.addEventListener('scroll', function () { pop.classList.remove('on'); }, { passive: true });
     })();
 
+    // Cmd/Ctrl+K jumps to search from anywhere. Search is intentionally absent
+    // from the nav — it's a tool for finding your own writing, not a page to
+    // advertise. Delete this block to remove the shortcut.
+    (function () {
+      document.addEventListener('keydown', function (e) {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          if (location.pathname !== '/search/') location.href = '/search/';
+          else document.getElementById('q')?.focus();
+        }
+      });
+    })();
+
     // EN / Burmese toggle, remembered across pages.
     (function () {
       var wrap = document.querySelector('[data-lang-root]');

@@ -1,0 +1,210 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Deliberately not in the nav — this is a tool for finding your own writing,
+// reached by URL or Cmd/Ctrl+K from anywhere on the site.
+---
+<Base title="Search — Nyan Lynn Tun" description="Search every post and project.">
+  <div class="read">
+    <header class="head">
+      <p class="eyebrow">Search</p>
+      <h1>Find anything.</h1>
+      <p class="lede">
+        Full text across every post and project, in English and Burmese.
+        Press <kbd>Cmd</kbd>+<kbd>K</kbd> anywhere on the site to get back here.
+      </p>
+    </header>
+
+    <div class="box">
+      <span class="prompt">/</span>
+      <input
+        id="q"
+        type="search"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="Type to search…"
+        aria-label="Search posts and projects"
+      />
+      <span class="hint" id="count"></span>
+    </div>
+
+    <div id="results" class="results" aria-live="polite"></div>
+    <p id="empty" class="empty" hidden>Nothing matches that.</p>
+  </div>
+</Base>
+
+<style>
+  .head { padding: 84px 0 30px; }
+  .head h1 { font-size: clamp(34px, 5.2vw, 52px); line-height: 1.05; margin: 18px 0 16px; }
+  .lede { font-size: 17px; line-height: 1.7; color: var(--mute); }
+  kbd {
+    font-family: var(--mono); font-size: 11.5px; border: 1px solid var(--line2);
+    padding: 1px 6px; color: var(--body); background: var(--raise);
+  }
+
+  .box {
+    display: flex; align-items: center; gap: 12px;
+    border: 1px solid var(--line2); background: var(--raise);
+    padding: 0 16px; margin-bottom: 8px;
+  }
+  .box:focus-within { border-color: var(--accent); }
+  .prompt { font-family: var(--mono); font-size: 15px; color: var(--accent); }
+  #q {
+    flex: 1; background: none; border: 0; outline: none; color: var(--ink);
+    font-family: var(--mono); font-size: 15px; padding: 15px 0;
+  }
+  #q::placeholder { color: var(--faint); }
+  #q::-webkit-search-cancel-button { filter: grayscale(1) opacity(.5); }
+  .hint {
+    font-family: var(--mono); font-size: 11px; color: var(--faint);
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+
+  .results { display: flex; flex-direction: column; }
+  .empty { font-size: 15px; color: var(--faint); padding: 26px 0; }
+</style>
+
+<style is:global>
+  .hit {
+    display: block; text-decoration: none; padding: 16px 0;
+    border-top: 1px solid var(--line); transition: border-color .15s;
+  }
+  .hit:first-child { border-top: 1px solid var(--line2); }
+  .hit:hover, .hit.sel { border-top-color: var(--accent); }
+  .hit:hover .hit-title, .hit.sel .hit-title { color: var(--accent-hi); }
+  .hit-top {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent2);
+  }
+  .hit-top .date { color: var(--faint); letter-spacing: .04em; margin-left: auto; }
+  .hit-title {
+    font-family: var(--display); font-size: 18.5px; font-weight: 600;
+    color: var(--ink); letter-spacing: -.015em; line-height: 1.3;
+    transition: color .15s;
+  }
+  .hit-snip { font-size: 14px; line-height: 1.6; color: var(--mute); margin-top: 6px; }
+  .hit-snip mark { background: rgba(63,207,117,.22); color: var(--ink); padding: 0 2px; }
+  .hit-my { font-family: var(--my); line-height: 1.9; }
+</style>
+
+<script is:inline>
+  (function () {
+    var input = document.getElementById('q');
+    var out = document.getElementById('results');
+    var empty = document.getElementById('empty');
+    var count = document.getElementById('count');
+    var data = [];
+    var sel = -1;
+
+    fetch('/search-index.json')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        data = d;
+        count.textContent = d.length + ' indexed';
+        run(new URLSearchParams(location.search).get('q') || '');
+      })
+      .catch(function () { count.textContent = 'index unavailable'; });
+
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Snippet around the first match, so you can see why something matched.
+    function snippet(text, q) {
+      if (!text) return '';
+      var i = text.toLowerCase().indexOf(q);
+      if (i < 0) return '';
+      var start = Math.max(0, i - 60);
+      var end = Math.min(text.length, i + q.length + 110);
+      var s = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+      var at = s.toLowerCase().indexOf(q);
+      return esc(s.slice(0, at)) + '<mark>' + esc(s.slice(at, at + q.length)) + '</mark>' + esc(s.slice(at + q.length));
+    }
+
+    function score(item, q) {
+      var t = item.title.toLowerCase();
+      if (t === q) return 100;
+      if (t.indexOf(q) === 0) return 80;
+      if (t.indexOf(q) > -1) return 60;
+      if ((item.titleMy || '').indexOf(q) > -1) return 58;
+      for (var i = 0; i < item.tags.length; i++) {
+        if (item.tags[i].toLowerCase().indexOf(q) > -1) return 45;
+      }
+      if (item.summary.toLowerCase().indexOf(q) > -1) return 30;
+      if (item.text.toLowerCase().indexOf(q) > -1) return 15;
+      if ((item.textMy || '').indexOf(q) > -1) return 14;
+      return 0;
+    }
+
+    function run(raw) {
+      var q = raw.trim().toLowerCase();
+      input.value = raw;
+      sel = -1;
+
+      if (!q) {
+        out.innerHTML = '';
+        empty.hidden = true;
+        count.textContent = data.length + ' indexed';
+        return;
+      }
+
+      var hits = data
+        .map(function (item) { return { item: item, s: score(item, q) }; })
+        .filter(function (h) { return h.s > 0; })
+        .sort(function (a, b) { return b.s - a.s; });
+
+      count.textContent = hits.length + ' of ' + data.length;
+      empty.hidden = hits.length > 0;
+
+      out.innerHTML = hits.map(function (h) {
+        var it = h.item;
+        var kind = it.collection === 'blog' ? 'Post' : 'Project';
+        var snip = snippet(it.summary, q) || snippet(it.text, q);
+        var snipMy = snip ? '' : snippet(it.textMy, q);
+        return (
+          '<a class="hit" href="' + it.url + '">' +
+            '<div class="hit-top"><span>' + kind + '</span>' +
+              (it.tags.length ? '<span>' + esc(it.tags.slice(0, 3).join(' · ')) + '</span>' : '') +
+              (it.date ? '<span class="date">' + it.date + '</span>' : '') +
+            '</div>' +
+            '<div class="hit-title">' + esc(it.title) + '</div>' +
+            (snip ? '<div class="hit-snip">' + snip + '</div>' : '') +
+            (snipMy ? '<div class="hit-snip hit-my">' + snipMy + '</div>' : '') +
+          '</a>'
+        );
+      }).join('');
+    }
+
+    input.addEventListener('input', function () {
+      run(input.value);
+      var u = new URL(location.href);
+      if (input.value.trim()) u.searchParams.set('q', input.value);
+      else u.searchParams.delete('q');
+      history.replaceState(null, '', u);
+    });
+
+    // Arrow keys move through results, Enter opens — the quick-switcher habit.
+    input.addEventListener('keydown', function (e) {
+      var hits = out.querySelectorAll('.hit');
+      if (!hits.length) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        sel += e.key === 'ArrowDown' ? 1 : -1;
+        if (sel < 0) sel = hits.length - 1;
+        if (sel >= hits.length) sel = 0;
+        hits.forEach(function (h, i) { h.classList.toggle('sel', i === sel); });
+        hits[sel].scrollIntoView({ block: 'nearest' });
+      } else if (e.key === 'Enter' && sel > -1) {
+        e.preventDefault();
+        location.href = hits[sel].getAttribute('href');
+      } else if (e.key === 'Escape') {
+        input.value = '';
+        run('');
+      }
+    });
+
+    input.focus();
+  })();
+</script>

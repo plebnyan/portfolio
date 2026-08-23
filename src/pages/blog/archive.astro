@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { isPublished } from '../../lib/content';
+import { originalsOnly } from '../../lib/i18n';
+
+// The full archive: every post, densest possible, grouped year → month. The
+// blog index carries summaries for reading; this one is for finding.
+const posts = originalsOnly(await getCollection('blog', isPublished))
+  .sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
+
+const MONTHS = ['January','February','March','April','May','June',
+                'July','August','September','October','November','December'];
+
+// [{ year, months: [{ name, posts: [] }] }]
+const years = [];
+for (const p of posts) {
+  const d = p.data.date;
+  if (!d) continue;
+  const y = d.getFullYear();
+  const m = d.getMonth();
+  let yr = years.find((x) => x.year === y);
+  if (!yr) { yr = { year: y, months: [] }; years.push(yr); }
+  let mo = yr.months.find((x) => x.index === m);
+  if (!mo) { mo = { index: m, name: MONTHS[m], posts: [] }; yr.months.push(mo); }
+  mo.posts.push(p);
+}
+
+const dm = (d) =>
+  `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+---
+<Base title="All posts — Nyan Lynn Tun" description="Every post, by year and month.">
+  <div class="read">
+    <header class="head">
+      <p class="eyebrow">Archive</p>
+      <h1>All posts</h1>
+      <p class="count">{posts.length} {posts.length === 1 ? 'post' : 'posts'} written</p>
+    </header>
+
+    {years.map((yr) => (
+      <section class="year">
+        <h2 class="year-h">{yr.year}</h2>
+        {yr.months.map((mo) => (
+          <div class="month">
+            <h3 class="month-h">{mo.name}</h3>
+            <ul class="list">
+              {mo.posts.map((p) => (
+                <li>
+                  <a href={`/blog/${p.slug}/`}>{p.data.title}</a>
+                  <span class="d">{dm(p.data.date)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    ))}
+
+    {posts.length === 0 && <p class="count">Nothing published yet.</p>}
+
+    <div class="btn-row" style="margin-top: 60px;">
+      <a class="btn" href="/blog">Blog, with summaries</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .head { padding: 84px 0 10px; }
+  .head h1 { font-size: clamp(34px, 5.2vw, 52px); line-height: 1.05; margin: 18px 0 14px; }
+  .count { font-size: 16px; color: var(--mute); font-style: italic; }
+
+  .year { margin-top: 46px; padding-top: 22px; border-top: 1px solid var(--line2); }
+  .year-h {
+    font-size: 26px; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  }
+  .month { margin-top: 26px; }
+  .month-h {
+    font-size: 13px; font-weight: 500; color: var(--accent);
+    font-family: var(--mono); letter-spacing: .14em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .list { list-style: none; display: flex; flex-direction: column; }
+  .list li {
+    display: flex; align-items: baseline; gap: 16px; padding: 9px 0 9px 16px;
+    border-left: 1px solid var(--line); transition: border-color .15s;
+  }
+  .list li:hover { border-left-color: var(--accent); }
+  .list a {
+    font-size: 16.5px; line-height: 1.45; color: var(--body);
+    text-decoration: none; transition: color .15s; flex: 1;
+  }
+  .list li:hover a { color: var(--accent-hi); }
+  .d {
+    font-family: var(--mono); font-size: 11.5px; color: var(--faint);
+    font-variant-numeric: tabular-nums; flex-shrink: 0;
+  }
+</style>

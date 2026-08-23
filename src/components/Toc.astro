@@ -1,15 +1,16 @@
 ---
 // Table of contents from the h2/h3 headings Astro already extracted.
-const { headings = [] } = Astro.props;
+// `sidebar` renders it as a sticky rail; otherwise it sits inline in the flow.
+const { headings = [], sidebar = false } = Astro.props;
 const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
-{items.length > 2 && (
-  <nav class="toc" aria-label="On this page">
-    <div class="toc-label">On this page</div>
+{items.length > 0 && (
+  <nav class={sidebar ? 'toc toc-side' : 'toc'} aria-label="On this page">
+    <div class="toc-label">Contents</div>
     <ol>
       {items.map((h) => (
         <li class={h.depth === 3 ? 'sub' : ''}>
-          <a href={`#${h.slug}`}>{h.text}</a>
+          <a href={`#${h.slug}`} data-toc={h.slug}>{h.text}</a>
         </li>
       ))}
     </ol>
@@ -33,4 +34,70 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
     line-height: 1.45; transition: color .15s;
   }
   .toc a:hover { color: var(--accent-hi); }
+
+  /* sidebar variant */
+  .toc-side { margin: 0; border-left: 0; padding: 0; }
+  .toc-side .toc-label { color: var(--ink); margin-bottom: 14px; }
+  .toc-side ol { gap: 0; }
+  .toc-side li { display: flex; }
+  .toc-side li.sub { padding-left: 14px; }
+  .toc-side a {
+    display: block; padding: 6px 0 6px 13px; font-size: 13.5px;
+    border-left: 2px solid var(--line); width: 100%;
+    transition: color .15s, border-color .15s;
+  }
+  .toc-side a.active { color: var(--accent); border-left-color: var(--accent); }
 </style>
+
+<script is:inline>
+  // Highlight whichever section you're currently reading.
+  //
+  // Must wait for the document: this component renders in the sidebar, which is
+  // parsed *before* the article, so the headings it observes don't exist yet.
+  (function () {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+  function init() {
+    var links = document.querySelectorAll('.toc-side a[data-toc]');
+    if (!links.length) return;
+
+    var byId = {};
+    links.forEach(function (a) { byId[a.dataset.toc] = a; });
+
+    var targets = Object.keys(byId)
+      .map(function (id) { return document.getElementById(id); })
+      .filter(Boolean);
+    if (!targets.length) return;
+
+    var current = null;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function (a) { a.classList.toggle('active', a.dataset.toc === id); });
+    }
+
+    var seen = new Map();
+    var obs = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) { seen.set(e.target.id, e); });
+        // The topmost heading that's currently on screen wins; if none are,
+        // keep whichever one we last passed.
+        var visible = [...seen.values()]
+          .filter(function (e) { return e.isIntersecting; })
+          .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+        if (visible.length) { setActive(visible[0].target.id); return; }
+        var above = [...seen.values()]
+          .filter(function (e) { return e.boundingClientRect.top < 0; })
+          .sort(function (a, b) { return b.boundingClientRect.top - a.boundingClientRect.top; });
+        if (above.length) setActive(above[0].target.id);
+      },
+      { rootMargin: '-80px 0px -55% 0px', threshold: 0 }
+    );
+    targets.forEach(function (t) { obs.observe(t); });
+  }
+  })();
+</script>

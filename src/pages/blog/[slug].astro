@@ -23,52 +23,86 @@ const My = my ? (await my.render()).Content : null;
 const hasMy = !!My;
 const fmt = (dt) => dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 const iso = d.date.toISOString();
+// Any heading at all earns a rail; a post with none collapses the column so it
+// isn't left with a dead 200px gutter.
+const showToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length > 0;
 ---
 <Base title={`${d.title} — Nyan Lynn Tun`} description={d.excerpt}>
-  <div class="read" data-lang-root data-lang="en">
+  <div class="post-shell" data-lang-root data-lang="en">
     <a class="back" href="/blog">← Blog</a>
 
-    <header class="head">
-      <p class="meta"><time datetime={iso}>{fmt(d.date)}</time></p>
-      <h1 data-title-en={d.title} data-title-my={my ? my.data.title : d.title}>{d.title}</h1>
-
-      <div class="lang-pane active" data-lang="en"><p class="lede">{d.excerpt}</p></div>
-      {hasMy && (
-        <div class="lang-pane" data-lang="my"><p class="lede my-title">{my.data.excerpt}</p></div>
+    <div class={showToc ? "post-grid" : "post-grid no-toc"}>
+      {showToc && (
+        <aside class="post-side">
+          <Toc headings={headings} sidebar />
+        </aside>
       )}
 
-      <div class="head-foot">
-        {d.tags.length > 0 && (
-          <div class="taglist">{d.tags.map((t) => <a class="tag" href={`/tags/${t}/`}>{t}</a>)}</div>
-        )}
-        {hasMy && (
-          <div class="lang-toggle">
-            <button data-lang="en" class="active" aria-pressed="true">EN</button>
-            <button data-lang="my" aria-pressed="false">မြန်မာ</button>
+      <div class="post-main">
+        <header class="head">
+          <p class="meta"><time datetime={iso}>{fmt(d.date)}</time></p>
+          <h1 data-title-en={d.title} data-title-my={my ? my.data.title : d.title}>{d.title}</h1>
+
+          <div class="lang-pane active" data-lang="en"><p class="lede">{d.excerpt}</p></div>
+          {hasMy && (
+            <div class="lang-pane" data-lang="my"><p class="lede my-title">{my.data.excerpt}</p></div>
+          )}
+
+          <div class="head-foot">
+            {d.tags.length > 0 && (
+              <div class="taglist">{d.tags.map((t) => <a class="tag" href={`/tags/${t}/`}>{t}</a>)}</div>
+            )}
+            {hasMy && (
+              <div class="lang-toggle">
+                <button data-lang="en" class="active" aria-pressed="true">EN</button>
+                <button data-lang="my" aria-pressed="false">မြန်မာ</button>
+              </div>
+            )}
           </div>
-        )}
+        </header>
+
+        {d.cover && <img class="cover" src={d.cover} alt="" loading="lazy" />}
+
+        <article>
+          <div class="lang-pane active" data-lang="en"><div class="prose"><Content /></div></div>
+          {hasMy && <div class="lang-pane" data-lang="my"><div class="prose"><My /></div></div>}
+        </article>
+
+        <Backlinks collection="blog" slug={post.slug} />
       </div>
-    </header>
-
-    {d.cover && <img class="cover" src={d.cover} alt="" loading="lazy" />}
-
-    <article>
-      <Toc headings={headings} />
-      <div class="lang-pane active" data-lang="en"><div class="prose"><Content /></div></div>
-      {hasMy && <div class="lang-pane" data-lang="my"><div class="prose"><My /></div></div>}
-    </article>
-
-    <Backlinks collection="blog" slug={post.slug} />
+    </div>
   </div>
 </Base>
 
 <style>
-  .back { font-family: var(--mono); font-size: 12px; color: var(--mute); text-decoration: none; display: inline-block; padding-top: 44px; }
+  .post-shell { max-width: 1120px; margin: 0 auto; padding: 0 30px; }
+  .back {
+    font-family: var(--mono); font-size: 12px; color: var(--mute);
+    text-decoration: none; display: inline-block; padding-top: 44px;
+  }
   .back:hover { color: var(--accent); }
 
-  .head { padding: 26px 0 0; border-bottom: 1px solid var(--line); padding-bottom: 26px; }
+  /* Contents rail left, article right. The article keeps its own reading width
+     so the rail doesn't push the measure wider than it should be. */
+  .post-grid {
+    display: grid; grid-template-columns: 200px minmax(0, 1fr);
+    gap: 56px; align-items: start; margin-top: 8px;
+  }
+  .post-side { position: sticky; top: 88px; padding-top: 78px; }
+  .post-main { min-width: 0; max-width: 720px; }
+
+  .post-grid.no-toc { grid-template-columns: minmax(0, 1fr); }
+  .post-grid.no-toc .post-main { max-width: 760px; margin: 0 auto; }
+
+  @media (max-width: 1000px) {
+    .post-grid { grid-template-columns: 1fr; gap: 0; }
+    .post-side { position: static; padding-top: 34px; order: -1; }
+    .post-main { max-width: none; }
+  }
+
+  .head { padding: 26px 0 26px; border-bottom: 1px solid var(--line); }
   .head h1 {
-    font-size: calc(clamp(32px, 5vw, 48px) * var(--title-scale, 1));
+    font-size: calc(clamp(32px, 5vw, 46px) * var(--title-scale, 1));
     line-height: var(--title-lh, 1.08);
     margin: 14px 0 18px;
   }
@@ -76,5 +110,5 @@ const iso = d.date.toISOString();
   .head-foot { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 26px; }
 
   .cover { width: 100%; height: auto; display: block; border: 1px solid var(--line); margin-top: 34px; }
-  article { padding-top: 20px; }
+  article { padding-top: 28px; }
 </style>

@@ -1,23 +1,23 @@
 ---
-title: "Nyan Lynn Tun"
-eyebrow: "About"
-lede: "I build the data platforms other people's decisions sit on — mostly on Azure, mostly in Databricks, and more often than I'd like, out of SAP."
+title: Nyan Lynn Tun
+eyebrow: About
+lede: I am a data engineer and a lifelong learner
 facts:
-  - label: "Role"
-    value: "Data Engineer"
-  - label: "Experience"
-    value: "6+ years"
-  - label: "Cloud"
-    value: "Azure — Databricks, Synapse, Fabric"
-  - label: "Focus"
-    value: "Lakehouse architecture · Dimensional modelling · SAP integration"
-  - label: "Status"
-    value: "Available for consulting"
+  - label: Role
+    value: Data Engineer
+  - label: Experience
+    value: 6+ years
+  - label: Cloud
+    value: Azure — Databricks, Synapse, Fabric
+  - label: Focus
+    value: Lakehouse architecture · Dimensional modelling · SAP integration
+  - label: Status
+    value: Available for consulting
 ---
 
 Six years in, the work rhymes. Data arrives somewhere inconvenient, four teams need it in four shapes, and nobody agrees on what a customer is. The tooling is never the hard part — the modelling is, and the discipline to keep raw and modelled data from bleeding into each other.
 
-## How I work
+## About me
 
 **Model first, tool second.** A clean dimensional model outlives the platform it was built on. I've migrated the same star schema across three engines; I've never migrated a pipeline that skipped the modelling.
 

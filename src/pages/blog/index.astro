@@ -42,6 +42,12 @@ const c = site.blogPage;
       </section>
     ))}
 
+    {posts.length > 0 && (
+      <div class="btn-row" style="margin-top: 8px;">
+        <a class="btn" href="/blog/archive">All posts, by year →</a>
+      </div>
+    )}
+
     {posts.length === 0 && (
       <p class="empty">No posts published yet. Write one in the CMS at <code>/admin</code>.</p>
     )}
