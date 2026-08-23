@@ -53,7 +53,3 @@ The generic tests cover the usual ground — uniqueness, not-null, relationships
 ## Keeping history
 
 Product attributes change. A snapshot tracks them as SCD Type 2, so an order from six months ago can still be read against the product as it was then, rather than as it is now.
-
-## What's still missing
-
-Being honest about the gaps: there's no CI yet — `dbt build` should run on every pull request and doesn't. Test coverage on silver and gold is thinner than on the sources, and there's no live dashboard on top of the gold layer.
