@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nyan Lynn Tun — Data Engineer</title>
+  <meta name="description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
+  <link rel="canonical" href="https://nyanlynntun.com/" />
+  <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nyanlynntun.com/" />
+  <meta property="og:title" content="Nyan Lynn Tun — Data Engineer" />
+  <meta property="og:description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
+  <meta property="og:image" content="https://nyanlynntun.com/img/literally_me.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Set the theme before paint so there's no flash. -->
+  <script>
+    try {
+      var t = localStorage.getItem('theme');
+      if (t) document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0d10;
+      --card: #14161b;
+      --line: #23262e;
+      --ink: #f2f3f5;
+      --mute: #9aa0ab;
+      --accent: #8b7cf6;
+      --ok: #3ecf8e;
+      --sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      color-scheme: dark;
+    }
+    :root[data-theme="light"] {
+      --bg: #fbfbfa;
+      --card: #ffffff;
+      --line: #e6e6e3;
+      --ink: #15161a;
+      --mute: #5d626c;
+      --accent: #6a58e8;
+      --ok: #16a36a;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg: #fbfbfa; --card: #ffffff; --line: #e6e6e3;
+        --ink: #15161a; --mute: #5d626c; --accent: #6a58e8; --ok: #16a36a;
+        color-scheme: light;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--ink);
+      font-family: var(--sans); font-size: 16px; line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .logo { font-family: var(--mono); font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .logo::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    nav { display: flex; align-items: center; gap: 22px; font-size: 14px; }
+    nav a { text-decoration: none; color: var(--mute); }
+    nav a:hover { color: var(--ink); }
+    .theme-btn {
+      width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 8px;
+      background: none; color: var(--mute); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .theme-btn:hover { color: var(--ink); }
+    .theme-btn svg { width: 16px; height: 16px; }
+    @media (max-width: 560px) { nav a.hide-sm { display: none; } }
+
+    /* Hero */
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 56px;
+      align-items: center; padding: 88px 0 72px;
+    }
+    .kicker { font-family: var(--mono); font-size: 13px; color: var(--mute); }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 14px;
+      padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px;
+      background: var(--card); font-size: 13px; color: var(--mute);
+    }
+    .pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+    h1 {
+      font-size: clamp(34px, 5.2vw, 52px); line-height: 1.08; letter-spacing: -0.035em;
+      font-weight: 700; margin-top: 22px;
+    }
+    .lede { font-size: 17.5px; color: var(--mute); margin-top: 22px; max-width: 58ch; }
+    .lede strong { color: var(--ink); font-weight: 600; }
+    .ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 30px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px;
+      border-radius: 8px; border: 1px solid var(--line); background: var(--card);
+      font-size: 14.5px; font-weight: 500; text-decoration: none; transition: border-color .15s, transform .15s;
+    }
+    .btn:hover { border-color: var(--mute); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.08); border-color: var(--accent); }
+    .btn svg { width: 16px; height: 16px; }
+    .where { font-family: var(--mono); font-size: 12.5px; color: var(--mute); margin-top: 18px; }
+    .photo img {
+      width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: center 75%; display: block;
+      border-radius: 14px; border: 1px solid var(--line);
+    }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; padding: 48px 0 56px; }
+      .photo { order: -1; max-width: 180px; }
+    }
+
+    /* Sections */
+    section { padding: 64px 0; border-top: 1px solid var(--line); }
+    .label { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+    .section-intro { color: var(--mute); margin-top: 10px; max-width: 60ch; }
+
+    /* Work */
+    .work { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+    @media (max-width: 720px) { .work { grid-template-columns: 1fr; } }
+    .card {
+      display: flex; flex-direction: column; padding: 24px;
+      background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+      text-decoration: none; transition: border-color .15s, transform .15s;
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card .tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+    .card h3 { font-size: 20px; letter-spacing: -0.02em; margin-top: 10px; }
+    .card p { color: var(--mute); font-size: 15px; margin-top: 8px; flex: 1; }
+    .stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+    .stack span {
+      font-family: var(--mono); font-size: 12px; color: var(--mute);
+      padding: 3px 8px; border: 1px solid var(--line); border-radius: 6px;
+    }
+    .card .more { font-size: 14px; font-weight: 500; margin-top: 18px; }
+
+    /* Services */
+    .services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 28px; }
+    @media (max-width: 820px) { .services { grid-template-columns: 1fr; } }
+    .services .num { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+    .services h3 { font-size: 17px; margin-top: 8px; letter-spacing: -0.01em; }
+    .services p { color: var(--mute); font-size: 15px; margin-top: 8px; }
+
+    /* About */
+    .about { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 48px; margin-top: 20px; }
+    @media (max-width: 820px) { .about { grid-template-columns: 1fr; gap: 32px; } }
+    .about h2 { font-size: 28px; letter-spacing: -0.03em; line-height: 1.2; }
+    .about p { color: var(--mute); margin-top: 16px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-content: start; }
+    .stat { padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+    .stat b { display: block; font-size: 26px; letter-spacing: -0.03em; }
+    .stat span { font-size: 13.5px; color: var(--mute); }
+
+    /* Contact */
+    .contact { text-align: center; padding: 80px 0; }
+    .contact h2 { font-size: clamp(26px, 4vw, 36px); letter-spacing: -0.03em; }
+    .contact p { color: var(--mute); margin: 12px auto 0; max-width: 52ch; }
+    .contact .ctas { justify-content: center; }
+
+    footer { border-top: 1px solid var(--line); padding: 28px 0; font-size: 13px; color: var(--mute); }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--ink); }
+    footer .links { display: flex; gap: 18px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="/">nyanlynntun.com</a>
+    <nav>
+      <a class="hide-sm" href="#work">Work</a>
+      <a class="hide-sm" href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="theme" aria-label="Toggle light/dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div>
+      <p class="kicker">Nyan Lynn Tun</p>
+      <span class="pill">Available for data engineering roles &amp; consulting</span>
+      <h1>Data engineer with technical depth and business understanding.</h1>
+      <p class="lede">
+        <strong>6+ years</strong> building data platforms on <strong>Azure</strong> and
+        <strong>Databricks</strong>: lakehouse architecture, dimensional modelling,
+        <strong>dbt</strong> pipelines and SAP integration. I work with the business to
+        understand what the data needs to answer, then build models and pipelines that answer it.
+      </p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="mailto:hello@nyanlynntun.com" data-goatcounter-click="cta-email-hero">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="cta-linkedin-hero">LinkedIn</a>
+        <a class="btn" href="https://github.com/plebnyan" target="_blank" rel="noopener" data-goatcounter-click="cta-github-hero">GitHub</a>
+      </div>
+      <p class="where">Based in Myanmar · remote · UTC+6:30</p>
+    </div>
+    <div class="photo">
+      <img src="/img/literally_me.jpg" alt="Nyan Lynn Tun" width="675" height="900" />
+    </div>
+  </div>
+
+  <!-- Work -->
+  <section id="work">
+    <p class="label">Selected work</p>
+    <p class="section-intro">Projects I have designed and built end to end. Most client work sits in private repos, so these are the pieces I can show.</p>
+
+    <div class="work">
+      <a class="card" href="https://github.com/plebnyan/jobnet-lakehouse" target="_blank" rel="noopener" data-goatcounter-click="project-jobnet">
+        <span class="tag">Personal · Shipped</span>
+        <h3>jobnet-lakehouse</h3>
+        <p>An end-to-end medallion lakehouse that turns scattered Myanmar job postings into a clean, queryable view of the hiring market — scraped weekly, governed, and served through a dashboard.</p>
+        <div class="stack"><span>Databricks</span><span>Delta Lake</span><span>dbt</span><span>Azure ADF</span><span>Unity Catalog</span></div>
+        <span class="more">View on GitHub ↗</span>
+      </a>
+
+      <a class="card" href="https://github.com/plebnyan/dbt_core_databricks" target="_blank" rel="noopener" data-goatcounter-click="project-dbt">
+        <span class="tag">Personal · Active</span>
+        <h3>dbt Core on Databricks</h3>
+        <p>A medallion e-commerce pipeline on a Databricks SQL Warehouse — bronze, silver and gold layers, source tests, PII tagging and SCD Type 2 snapshots for product history.</p>
+        <div class="stack"><span>dbt Core</span><span>Databricks SQL</span><span>SQL</span></div>
+        <span class="more">View on GitHub ↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- What I help with -->
+  <section>
+    <p class="label">What I help with</p>
+    <div class="services">
+      <div>
+        <span class="num">01</span>
+        <h3>Lakehouse architecture</h3>
+        <p>Medallion layering on Databricks and Azure, governed with Unity Catalog, with raw and modelled data kept cleanly apart.</p>
+      </div>
+      <div>
+        <span class="num">02</span>
+        <h3>Pipelines &amp; data modelling</h3>
+        <p>Dimensional models and dbt pipelines with tests and contracts on every model, so the numbers hold up when someone asks.</p>
+      </div>
+      <div>
+        <span class="num">03</span>
+        <h3>SAP data integration</h3>
+        <p>Getting SAP data out of the source system and into a shape the business can actually query and report on.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <p class="label">About</p>
+    <div class="about">
+      <div>
+        <h2>Six years of making messy data useful.</h2>
+        <p>Data arrives somewhere inconvenient, four teams need it in four shapes, and nobody agrees on what a customer is. The tooling is rarely the hard part — the modelling is, and the discipline to keep raw and modelled data from bleeding into each other.</p>
+        <p>I've moved the same star schema across three engines. A clean model outlives the platform it was built on — that's where I put the effort.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>6+</b><span>years in data engineering</span></div>
+        <div class="stat"><b>Azure</b><span>Databricks, Synapse, Fabric</span></div>
+        <div class="stat"><b>dbt</b><span>tests on every model</span></div>
+        <div class="stat"><b>SAP</b><span>source integration</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="contact">
+    <h2>Have data that needs to be right?</h2>
+    <p>Open to data engineering roles and consulting on pipelines, lakehouse architecture and data reliability. Let's talk.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="mailto:hello@nyanlynntun.com" data-goatcounter-click="cta-email-contact">hello@nyanlynntun.com</a>
+      <a class="btn" href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="cta-linkedin-contact">LinkedIn</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year">2026</span> Nyan Lynn Tun</span>
+    <div class="links">
+      <a href="https://github.com/plebnyan" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:hello@nyanlynntun.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  document.getElementById('theme').addEventListener('click', function () {
+    var root = document.documentElement;
+    var current = root.dataset.theme ||
+      (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    var next = current === 'light' ? 'dark' : 'light';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+
+<!-- Traffic tracking: GoatCounter (free, no cookies, no consent banner needed).
+     Stats live at https://nyanlynntun.goatcounter.com once that account exists.
+     Links with data-goatcounter-click are counted as click events. -->
+<script data-goatcounter="https://nyanlynntun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>
