@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at 'sha256-N1wWtAy/wYkbdLWRNZok6M4mxW7GYqtWFfJmMNj45v8=' 'sha256-VE2Wxn9q/BsUEmnXBkAQD5PIu4tTUQ5d9jthLFVme2k='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://nyanlynntun.goatcounter.com; connect-src 'self' https://nyanlynntun.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Nyan Lynn Tun — Data Engineer</title>
   <meta name="description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
   <link rel="canonical" href="https://nyanlynntun.com/" />
@@ -32,10 +32,11 @@
     "@type": "Person",
     "name": "Nyan Lynn Tun",
     "jobTitle": "Data Engineer",
+    "address": { "@type": "PostalAddress", "addressLocality": "Bangkok", "addressCountry": "TH" },
     "url": "https://nyanlynntun.com/",
     "image": "https://nyanlynntun.com/img/literally_me.jpg",
     "email": "mailto:contact@nyanlynntun.com",
-    "knowsAbout": ["Data engineering", "Databricks", "Azure", "dbt", "Delta Lake", "Lakehouse architecture", "Dimensional modelling", "SAP data integration"],
+    "knowsAbout": ["Data engineering", "Databricks", "Azure", "PySpark", "Python", "SQL", "dbt", "Delta Lake", "Lakehouse architecture", "Dimensional modelling", "SAP data integration"],
     "sameAs": [
       "https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa",
       "https://github.com/plebnyan"
@@ -195,6 +196,22 @@
     }
     .card .more { font-size: 14px; font-weight: 500; margin-top: 18px; }
 
+    /* Experience */
+    .section-intro a { color: var(--ink); }
+    .roles { list-style: none; margin-top: 28px; }
+    .roles li {
+      display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 24px;
+      padding: 24px 0; border-top: 1px solid var(--line);
+    }
+    .roles li:first-child { border-top: 0; padding-top: 4px; }
+    .roles .when { font-family: var(--mono); font-size: 13px; color: var(--mute); padding-top: 3px; }
+    .roles h3 { font-size: 19px; letter-spacing: -0.02em; }
+    .roles .org { font-size: 14.5px; color: var(--accent); margin-top: 2px; }
+    .roles p:not(.org) { color: var(--mute); font-size: 15px; margin-top: 10px; max-width: 70ch; }
+    .roles .stack { margin-top: 14px; }
+    @media (max-width: 640px) { .roles li { grid-template-columns: 1fr; gap: 6px; } }
+    .about .edu { font-family: var(--mono); font-size: 12.5px; margin-top: 20px; }
+
     /* Services */
     .services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; margin-top: 28px; }
     @media (max-width: 820px) { .services { grid-template-columns: 1fr; } }
@@ -247,12 +264,13 @@
   <div class="hero">
     <div>
       <p class="kicker">Nyan Lynn Tun</p>
-      <span class="pill">Available for data engineering roles &amp; consulting</span>
+      <span class="pill">Open to conversations about data engineering roles &amp; consulting</span>
       <h1>Data engineer with technical depth and business understanding.</h1>
       <p class="lede">
-        <strong>6+ years</strong> building data platforms on <strong>Azure</strong> and
-        <strong>Databricks</strong>: lakehouse architecture, dimensional modelling,
-        <strong>dbt</strong> pipelines and SAP integration. I work with the business to
+        <strong>5+ years in data</strong>, the last three as a data engineer, building platforms on
+        <strong>Azure</strong> and <strong>Databricks</strong>: lakehouse architecture,
+        <strong>SAP</strong> integration, dimensional modelling and pipelines in
+        <strong>PySpark</strong> and <strong>SQL</strong>. I work with the business to
         understand what the data needs to answer, then build models and pipelines that answer it.
       </p>
       <div class="ctas">
@@ -260,7 +278,7 @@
         <a class="btn" href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="cta-linkedin-hero">LinkedIn</a>
         <a class="btn" href="https://github.com/plebnyan" target="_blank" rel="noopener" data-goatcounter-click="cta-github-hero">GitHub</a>
       </div>
-      <p class="where">Based in Myanmar · remote · UTC+6:30</p>
+      <p class="where">Based in Bangkok · UTC+7</p>
     </div>
     <div class="photo">
       <picture>
@@ -270,10 +288,46 @@
     </div>
   </div>
 
-  <!-- Work -->
+  <!-- Experience -->
   <section id="work">
-    <p class="label">Selected work</p>
-    <p class="section-intro">Projects I have designed and built end to end. Most client work sits in private repos, so these are the pieces I can show.</p>
+    <p class="label">Experience</p>
+    <p class="section-intro">Manufacturing, retail and banking. Employers are left off here; the full history is on <a href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="exp-linkedin">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a> or on request.</p>
+
+    <ol class="roles">
+      <li>
+        <div class="when">2024 – now</div>
+        <div>
+          <h3>Data Engineer</h3>
+          <p class="org">Global manufacturer · Bangkok</p>
+          <p>I own the purchasing and supplier data domain on an Azure Databricks data mesh. I ingest SAP R/3 and S/4HANA through Data Factory and SLT, and I build governed Delta Lake data products (bronze, silver, gold) behind Unity Catalog. These include SCD Type 2 history for supplier terms and a harmonised supplier master. The products feed Power BI reporting for purchasing and quality teams across Asia/Pacific.</p>
+          <div class="stack"><span>Databricks</span><span>PySpark</span><span>Delta Lake</span><span>Unity Catalog</span><span>Data Factory</span><span>SAP BW / SLT</span><span>Power BI</span></div>
+        </div>
+      </li>
+      <li>
+        <div class="when">2023 – 2024</div>
+        <div>
+          <h3>Senior Data Engineer</h3>
+          <p class="org">Multi-company retail &amp; hospitality group · Yangon</p>
+          <p>I integrated POS, ERP and loyalty data from several operating companies into one central warehouse and ran the group's nightly ETL. I tuned SQL Server for high-volume daily loads and led a small BI team to redesign the architecture around a single source of truth, with data-quality tests and a data catalogue.</p>
+          <div class="stack"><span>SQL Server</span><span>SSIS</span><span>Synapse</span><span>T-SQL</span><span>Power BI</span></div>
+        </div>
+      </li>
+      <li>
+        <div class="when">2021 – 2023</div>
+        <div>
+          <h3>Data Analyst</h3>
+          <p class="org">Mobile banking &amp; retail · Yangon</p>
+          <p>I automated reporting with Python and SQL pipelines, set up a SQL Server environment for my team, and built Power BI dashboards on payments and sales data for senior management.</p>
+          <div class="stack"><span>Python</span><span>SQL</span><span>Power BI</span></div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Side projects -->
+  <section id="projects">
+    <p class="label">Side projects</p>
+    <p class="section-intro">Built on my own time to try out tools outside my day job.</p>
 
     <div class="work">
       <a class="card" href="https://github.com/plebnyan/dbt_core_databricks" target="_blank" rel="noopener" data-goatcounter-click="project-dbt">
@@ -307,7 +361,7 @@
       <div>
         <span class="num">02</span>
         <h3>Pipelines &amp; data modelling</h3>
-        <p>Dimensional models and dbt pipelines with tests and contracts on every model, so the numbers hold up when someone asks.</p>
+        <p>Dimensional models, SCD history and PySpark and SQL pipelines with data-quality checks built in, so the numbers hold up when someone asks.</p>
       </div>
       <div>
         <span class="num">03</span>
@@ -322,15 +376,16 @@
     <p class="label">About</p>
     <div class="about">
       <div>
-        <h2>Six years of making messy data useful.</h2>
+        <h2>Five years of making messy data useful.</h2>
         <p>Data arrives somewhere inconvenient, four teams need it in four shapes, and nobody agrees on what a customer is. The tooling is rarely the hard part — the modelling is, and the discipline to keep raw and modelled data from bleeding into each other.</p>
-        <p>I've moved the same star schema across three engines. A clean model outlives the platform it was built on — that's where I put the effort.</p>
+        <p>I started as an analyst, which is why I start every pipeline from the question the business is asking. I've built warehouses on SQL Server, Synapse and Databricks; a clean model outlives the platform it was built on, and that's where I put the effort.</p>
+        <p class="edu">BSc (Hons) Computer Science, University of Gloucestershire · Microsoft Certified: Azure Data Fundamentals</p>
       </div>
       <div class="stats">
-        <div class="stat"><b>6+</b><span>years in data engineering</span></div>
-        <div class="stat"><b>Azure</b><span>Databricks, Synapse, Fabric</span></div>
-        <div class="stat"><b>dbt</b><span>tests on every model</span></div>
-        <div class="stat"><b>SAP</b><span>source integration</span></div>
+        <div class="stat"><b>5+</b><span>years in data, 3+ in data engineering</span></div>
+        <div class="stat"><b>Azure</b><span>Databricks, Data Factory, Synapse, Fabric</span></div>
+        <div class="stat"><b>SAP</b><span>R/3, S/4HANA, BW, SLT</span></div>
+        <div class="stat"><b>PySpark</b><span>plus Python and T-SQL</span></div>
       </div>
     </div>
   </section>
@@ -338,7 +393,7 @@
   <!-- Contact -->
   <section id="contact" class="contact">
     <h2>Have data that needs to be right?</h2>
-    <p>Open to data engineering roles and consulting on pipelines, lakehouse architecture and data reliability. Let's talk.</p>
+    <p>Open to conversations about data engineering roles and consulting on pipelines, lakehouse architecture and SAP data. Let's talk.</p>
     <div class="ctas">
       <a class="btn btn-primary" href="mailto:contact@nyanlynntun.com" data-goatcounter-click="cta-email-contact">contact@nyanlynntun.com</a>
       <a class="btn" href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="cta-linkedin-contact">LinkedIn</a>

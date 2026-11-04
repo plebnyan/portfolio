@@ -51,7 +51,7 @@ def og_image():
     # stack chips
     chip_font = font(MONO, 19 * S)
     cx, cy = x, 400 * S
-    for label in ["Databricks", "Azure", "dbt", "Lakehouse", "SAP data"]:
+    for label in ["Databricks", "Azure", "PySpark", "Lakehouse", "SAP data"]:
         w = d.textlength(label, font=chip_font) + 28 * S
         d.rounded_rectangle((cx, cy, cx + w, cy + 40 * S), radius=8 * S, outline=LINE, width=2 * S)
         d.text((cx + 14 * S, cy + 20 * S), label, font=chip_font, fill=MUTE, anchor="lm")

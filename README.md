@@ -2,19 +2,21 @@
 
 [![Live site](https://img.shields.io/badge/live-nyanlynntun.com-8b7cf6)](https://nyanlynntun.com)
 
-The personal site of **Nyan Lynn Tun**, a data engineer who builds lakehouse platforms, dbt
+The personal site of **Nyan Lynn Tun**, a Bangkok-based data engineer who builds lakehouse platforms, PySpark
 pipelines and SAP data integrations on Azure and Databricks.
 
 [![Preview of nyanlynntun.com](site/img/og-image.png)](https://nyanlynntun.com)
 
 ## What's on the site
 
-- **Selected work.** Projects I've designed and built end to end, such as a medallion e-commerce
+- **Experience.** Data engineering in manufacturing (SAP, Azure Databricks data mesh), a
+  multi-company retail group's central warehouse, and analytics in banking and retail.
+- **Side projects.** Things I build on my own time, such as a medallion e-commerce
   pipeline with [dbt Core on Databricks](https://github.com/plebnyan/dbt_core_databricks)
   and *jobnet-lakehouse*, a lakehouse for the Myanmar job market that is still in progress.
 - **What I help with.** Lakehouse architecture, pipelines and dimensional modelling, and getting
   SAP data into a shape the business can report on.
-- **About.** Six years of making messy data useful, and why I think the model matters more than
+- **About.** Five years of making messy data useful, and why I think the model matters more than
   the platform it runs on.
 - **Contact.** Open to data engineering roles and consulting.
 
