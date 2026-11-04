@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at 'sha256-N1wWtAy/wYkbdLWRNZok6M4mxW7GYqtWFfJmMNj45v8=' 'sha256-VE2Wxn9q/BsUEmnXBkAQD5PIu4tTUQ5d9jthLFVme2k='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://nyanlynntun.goatcounter.com; connect-src 'self' https://nyanlynntun.goatcounter.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests" />
   <title>Nyan Lynn Tun — Data Engineer</title>
   <meta name="description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
   <link rel="canonical" href="https://nyanlynntun.com/" />
@@ -170,6 +172,7 @@
     section { padding: 64px 0; border-top: 1px solid var(--line); }
     .label { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
     .section-intro { color: var(--mute); margin-top: 10px; max-width: 60ch; }
+    .section-intro.more-link { margin-top: 20px; }
 
     /* Work */
     .work { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
@@ -289,7 +292,7 @@
         <span class="more">Repo coming soon</span>
       </div>
     </div>
-    <p class="section-intro" style="margin-top:20px"><a href="https://github.com/plebnyan" target="_blank" rel="noopener" data-goatcounter-click="project-more">More on GitHub ↗<span class="sr-only"> (opens in a new tab)</span></a></p>
+    <p class="section-intro more-link"><a href="https://github.com/plebnyan" target="_blank" rel="noopener" data-goatcounter-click="project-more">More on GitHub ↗<span class="sr-only"> (opens in a new tab)</span></a></p>
   </section>
 
   <!-- What I help with -->
@@ -379,7 +382,7 @@
      Stats live at https://nyanlynntun.goatcounter.com once that account exists.
      Links with data-goatcounter-click are counted as click events. -->
 <script data-goatcounter="https://nyanlynntun.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+        async src="https://gc.zgo.at/count.js"></script>
 
 </body>
 </html>

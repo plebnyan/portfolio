@@ -1,48 +1,54 @@
 # nyanlynntun.com
 
-Source for my portfolio site, [nyanlynntun.com](https://nyanlynntun.com). It's a single static
-page with no build step, hosted on GitHub Pages.
+[![Live site](https://img.shields.io/badge/live-nyanlynntun.com-8b7cf6)](https://nyanlynntun.com)
 
-## Layout
+The personal site of **Nyan Lynn Tun**, a data engineer who builds lakehouse platforms, dbt
+pipelines and SAP data integrations on Azure and Databricks.
+
+[![Preview of nyanlynntun.com](site/img/og-image.png)](https://nyanlynntun.com)
+
+## What's on the site
+
+- **Selected work.** Projects I've designed and built end to end, such as a medallion e-commerce
+  pipeline with [dbt Core on Databricks](https://github.com/plebnyan/dbt_core_databricks)
+  and *jobnet-lakehouse*, a lakehouse for the Myanmar job market that is still in progress.
+- **What I help with.** Lakehouse architecture, pipelines and dimensional modelling, and getting
+  SAP data into a shape the business can report on.
+- **About.** Six years of making messy data useful, and why I think the model matters more than
+  the platform it runs on.
+- **Contact.** Open to data engineering roles and consulting.
+
+## How it's built
+
+I deliberately kept it small. It's one hand-written HTML page with no framework, no build step
+and no dependencies.
+
+- **Fast.** The page is about 20 KB of HTML with inline CSS. Images are served as WebP where the
+  browser supports it.
+- **Light and dark.** It follows your system theme, with a toggle that remembers your choice and
+  doesn't flash on load.
+- **Accessible.** It uses semantic landmarks, visible keyboard focus, labelled controls and
+  screen-reader hints on external links.
+- **Discoverable.** It has Open Graph and Twitter cards, `schema.org` Person data, a sitemap and a
+  custom 404 page.
+- **Private by default.** Analytics run on [GoatCounter](https://www.goatcounter.com), which uses
+  no cookies and needs no consent banner. A Content Security Policy blocks every script I haven't
+  allowed.
+- **Hosted on GitHub Pages.** A GitHub Actions workflow, pinned to exact action versions,
+  publishes the `site/` folder on every push to `main`.
 
 ```
-site/                  ← everything here is published, as-is
-  index.html           the whole site (HTML + inline CSS/JS)
-  404.html             custom not-found page
-  robots.txt, sitemap.xml
-  apple-touch-icon.png iOS home-screen icon
-  CNAME                custom domain for GitHub Pages
-  img/                 favicon, photo (jpg + webp), og-image.png (social preview)
-brand/                 not published: brand notes, logo concepts, email signature,
-                       and make-images.py (regenerates the images in site/)
-.github/workflows/     deploy.yml publishes site/ on every push to main
+site/     the published website
+brand/    logo concepts, email signature and the scripts that generate images and the CSP
 ```
 
-## Editing
+## Get in touch
 
-1. Edit `site/index.html`.
-2. Preview locally: `python3 -m http.server -d site 8000`, then open http://localhost:8000.
-3. Push to `main`. The GitHub Action deploys within a minute or two.
+[contact@nyanlynntun.com](mailto:contact@nyanlynntun.com) ·
+[LinkedIn](https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa) ·
+[GitHub](https://github.com/plebnyan)
 
-When you add or change a page, update `<lastmod>` in `site/sitemap.xml`.
+---
 
-## Regenerating images
-
-After changing the photo or your title, run:
-
-```sh
-python3 brand/make-images.py
-```
-
-This rebuilds `og-image.png` (the 1200×630 link preview), `apple-touch-icon.png` and the WebP
-photo. It uses macOS system fonts and needs Pillow (`pip install pillow`); the WebP step also
-needs `cwebp` (`brew install webp`). After it redeploys, refresh LinkedIn's cached preview with the
-[Post Inspector](https://www.linkedin.com/post-inspector/).
-
-## Notes
-
-- `brand/BRAND-REQUIREMENTS.md` was written for the previous (Astro, eggshell + green) version
-  of the site. The current site uses a dark/light theme with a violet accent; the CSS variables at
-  the top of `site/index.html` are the source of truth for colours.
-- Analytics: [GoatCounter](https://nyanlynntun.goatcounter.com) (no cookies). Links with
-  `data-goatcounter-click` are tracked as events.
+© Nyan Lynn Tun. The code is here for reference. Please don't reuse the personal content (text,
+photo, branding) as your own.
