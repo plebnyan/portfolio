@@ -7,12 +7,39 @@
   <meta name="description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
   <link rel="canonical" href="https://nyanlynntun.com/" />
   <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#0c0d10" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://nyanlynntun.com/" />
+  <meta property="og:site_name" content="Nyan Lynn Tun" />
   <meta property="og:title" content="Nyan Lynn Tun — Data Engineer" />
   <meta property="og:description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
-  <meta property="og:image" content="https://nyanlynntun.com/img/literally_me.jpg" />
+  <meta property="og:image" content="https://nyanlynntun.com/img/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Nyan Lynn Tun — Data Engineer. Lakehouse, pipelines and SAP data on Azure and Databricks." />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nyan Lynn Tun — Data Engineer" />
+  <meta name="twitter:description" content="Data engineer building lakehouse architecture, pipelines and SAP data integration on Azure and Databricks." />
+  <meta name="twitter:image" content="https://nyanlynntun.com/img/og-image.png" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Nyan Lynn Tun",
+    "jobTitle": "Data Engineer",
+    "url": "https://nyanlynntun.com/",
+    "image": "https://nyanlynntun.com/img/literally_me.jpg",
+    "email": "mailto:contact@nyanlynntun.com",
+    "knowsAbout": ["Data engineering", "Databricks", "Azure", "dbt", "Delta Lake", "Lakehouse architecture", "Dimensional modelling", "SAP data integration"],
+    "sameAs": [
+      "https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa",
+      "https://github.com/plebnyan"
+    ]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -88,7 +115,18 @@
     }
     .theme-btn:hover { color: var(--ink); }
     .theme-btn svg { width: 16px; height: 16px; }
-    @media (max-width: 560px) { nav a.hide-sm { display: none; } }
+    @media (max-width: 560px) {
+      header .wrap { padding: 0 16px; }
+      nav { gap: 14px; font-size: 13.5px; }
+      .logo { font-size: 13px; }
+    }
+    @media (max-width: 360px) { .logo .tld { display: none; } }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
 
     /* Hero */
     .hero {
@@ -141,7 +179,9 @@
       background: var(--card); border: 1px solid var(--line); border-radius: 12px;
       text-decoration: none; transition: border-color .15s, transform .15s;
     }
-    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    a.card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card.soon { border-style: dashed; }
+    .card.soon .more { color: var(--mute); font-weight: 400; }
     .card .tag { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
     .card h3 { font-size: 20px; letter-spacing: -0.02em; margin-top: 10px; }
     .card p { color: var(--mute); font-size: 15px; margin-top: 8px; flex: 1; }
@@ -186,12 +226,12 @@
 
 <header>
   <div class="wrap">
-    <a class="logo" href="/">nyanlynntun.com</a>
-    <nav>
-      <a class="hide-sm" href="#work">Work</a>
-      <a class="hide-sm" href="#about">About</a>
+    <a class="logo" href="/">nyanlynntun<span class="tld">.com</span></a>
+    <nav aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
       <a href="#contact">Contact</a>
-      <button class="theme-btn" id="theme" aria-label="Toggle light/dark theme">
+      <button class="theme-btn" id="theme" type="button" aria-label="Dark theme" aria-pressed="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
     </nav>
@@ -213,14 +253,17 @@
         understand what the data needs to answer, then build models and pipelines that answer it.
       </p>
       <div class="ctas">
-        <a class="btn btn-primary" href="mailto:hello@nyanlynntun.com" data-goatcounter-click="cta-email-hero">Email me</a>
+        <a class="btn btn-primary" href="mailto:contact@nyanlynntun.com" data-goatcounter-click="cta-email-hero">Email me</a>
         <a class="btn" href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="cta-linkedin-hero">LinkedIn</a>
         <a class="btn" href="https://github.com/plebnyan" target="_blank" rel="noopener" data-goatcounter-click="cta-github-hero">GitHub</a>
       </div>
       <p class="where">Based in Myanmar · remote · UTC+6:30</p>
     </div>
     <div class="photo">
-      <img src="/img/literally_me.jpg" alt="Nyan Lynn Tun" width="675" height="900" />
+      <picture>
+        <source srcset="/img/literally_me.webp" type="image/webp" />
+        <img src="/img/literally_me.jpg" alt="Portrait of Nyan Lynn Tun" width="675" height="900" fetchpriority="high" />
+      </picture>
     </div>
   </div>
 
@@ -230,22 +273,23 @@
     <p class="section-intro">Projects I have designed and built end to end. Most client work sits in private repos, so these are the pieces I can show.</p>
 
     <div class="work">
-      <a class="card" href="https://github.com/plebnyan/jobnet-lakehouse" target="_blank" rel="noopener" data-goatcounter-click="project-jobnet">
-        <span class="tag">Personal · Shipped</span>
-        <h3>jobnet-lakehouse</h3>
-        <p>An end-to-end medallion lakehouse that turns scattered Myanmar job postings into a clean, queryable view of the hiring market — scraped weekly, governed, and served through a dashboard.</p>
-        <div class="stack"><span>Databricks</span><span>Delta Lake</span><span>dbt</span><span>Azure ADF</span><span>Unity Catalog</span></div>
-        <span class="more">View on GitHub ↗</span>
-      </a>
-
       <a class="card" href="https://github.com/plebnyan/dbt_core_databricks" target="_blank" rel="noopener" data-goatcounter-click="project-dbt">
         <span class="tag">Personal · Active</span>
         <h3>dbt Core on Databricks</h3>
         <p>A medallion e-commerce pipeline on a Databricks SQL Warehouse — bronze, silver and gold layers, source tests, PII tagging and SCD Type 2 snapshots for product history.</p>
         <div class="stack"><span>dbt Core</span><span>Databricks SQL</span><span>SQL</span></div>
-        <span class="more">View on GitHub ↗</span>
+        <span class="more">View on GitHub ↗<span class="sr-only"> (opens in a new tab)</span></span>
       </a>
+
+      <div class="card soon">
+        <span class="tag">Personal · In progress</span>
+        <h3>jobnet-lakehouse</h3>
+        <p>An end-to-end medallion lakehouse that turns scattered Myanmar job postings into a clean, queryable view of the hiring market — scraped weekly, governed, and served through a dashboard.</p>
+        <div class="stack"><span>Databricks</span><span>Delta Lake</span><span>dbt</span><span>Azure ADF</span><span>Unity Catalog</span></div>
+        <span class="more">Repo coming soon</span>
+      </div>
     </div>
+    <p class="section-intro" style="margin-top:20px"><a href="https://github.com/plebnyan" target="_blank" rel="noopener" data-goatcounter-click="project-more">More on GitHub ↗<span class="sr-only"> (opens in a new tab)</span></a></p>
   </section>
 
   <!-- What I help with -->
@@ -293,7 +337,7 @@
     <h2>Have data that needs to be right?</h2>
     <p>Open to data engineering roles and consulting on pipelines, lakehouse architecture and data reliability. Let's talk.</p>
     <div class="ctas">
-      <a class="btn btn-primary" href="mailto:hello@nyanlynntun.com" data-goatcounter-click="cta-email-contact">hello@nyanlynntun.com</a>
+      <a class="btn btn-primary" href="mailto:contact@nyanlynntun.com" data-goatcounter-click="cta-email-contact">contact@nyanlynntun.com</a>
       <a class="btn" href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener" data-goatcounter-click="cta-linkedin-contact">LinkedIn</a>
     </div>
   </section>
@@ -306,7 +350,7 @@
     <div class="links">
       <a href="https://github.com/plebnyan" target="_blank" rel="noopener">GitHub</a>
       <a href="https://www.linkedin.com/in/nyan-lynn-tun-a6aa2a1aa" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:hello@nyanlynntun.com">Email</a>
+      <a href="mailto:contact@nyanlynntun.com">Email</a>
     </div>
   </div>
 </footer>
@@ -314,13 +358,20 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  document.getElementById('theme').addEventListener('click', function () {
-    var root = document.documentElement;
-    var current = root.dataset.theme ||
+  var themeBtn = document.getElementById('theme');
+  function currentTheme() {
+    return document.documentElement.dataset.theme ||
       (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    var next = current === 'light' ? 'dark' : 'light';
-    root.dataset.theme = next;
+  }
+  // Screen readers hear "Dark theme, pressed / not pressed".
+  function syncThemeBtn() { themeBtn.setAttribute('aria-pressed', String(currentTheme() === 'dark')); }
+  syncThemeBtn();
+
+  themeBtn.addEventListener('click', function () {
+    var next = currentTheme() === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch (e) {}
+    syncThemeBtn();
   });
 </script>
 
